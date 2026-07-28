@@ -5,6 +5,7 @@ import { AuthPortal } from './components/AuthPortal';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
+import { DetailView } from './components/DetailView';
 
 // Modules
 import { AdminDashboard } from './components/Dashboards/AdminDashboard';
@@ -16,10 +17,19 @@ import { ActivityLogsModule } from './components/ActivityLogsModule';
 export function App() {
   const { isAuthenticated, activeTab } = useApp();
   const [showSplash, setShowSplash] = useState(true);
+  const [activeDetail, setActiveDetail] = useState(null); // { item, type }
 
   const handleSplashFinish = useCallback(() => {
     setShowSplash(false);
   }, []);
+
+  const handleOpenDetail = (item, type) => {
+    setActiveDetail({ item, type });
+  };
+
+  const handleCloseDetail = () => {
+    setActiveDetail(null);
+  };
 
   // 1. Show clean 2-second Splash Screen on initial app load
   if (showSplash) {
@@ -31,36 +41,46 @@ export function App() {
     return <AuthPortal />;
   }
 
-  // 3. Render authenticated Dashboard Module
+  // 3. Render Detail View if selected
   const renderTabContent = () => {
+    if (activeDetail) {
+      return (
+        <DetailView 
+          item={activeDetail.item} 
+          type={activeDetail.type} 
+          onBack={handleCloseDetail} 
+        />
+      );
+    }
+
     switch (activeTab) {
       case 'dashboard':
-        return <AdminDashboard />;
+        return <AdminDashboard onInspectDetail={(item, type) => handleOpenDetail(item, type)} />;
       case 'leave':
-        return <LeaveModule />;
+        return <LeaveModule onInspectDetail={(item) => handleOpenDetail(item, 'leave')} />;
       case 'material':
-        return <MaterialModule />;
+        return <MaterialModule onInspectDetail={(item) => handleOpenDetail(item, 'material')} />;
       case 'work':
-        return <WorkTransferModule />;
+        return <WorkTransferModule onInspectDetail={(item) => handleOpenDetail(item, 'work')} />;
       case 'logs':
         return <ActivityLogsModule />;
       default:
-        return <AdminDashboard />;
+        return <AdminDashboard onInspectDetail={(item, type) => handleOpenDetail(item, type)} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col w-full">
       {/* Top Header */}
       <Header />
 
-      {/* Main Layout Area */}
-      <div className="flex-1 flex max-w-7xl w-full mx-auto pb-16 lg:pb-6">
+      {/* Main Full Width Layout Area */}
+      <div className="flex-1 flex w-full pb-16 lg:pb-6">
         {/* Desktop Sidebar */}
         <Sidebar />
 
-        {/* Dynamic Page Content */}
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+        {/* Dynamic Page Content (Full Screen Width Expansion) */}
+        <main className="flex-1 p-6 lg:p-10 overflow-y-auto w-full">
           {renderTabContent()}
         </main>
       </div>

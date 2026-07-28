@@ -7,6 +7,10 @@
   font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   background-color: #f8fafc;
   color: #0f172a;
@@ -17,8 +21,8 @@ body {
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,55 +38,24 @@ body {
   background: #94a3b8;
 }
 
-/* Layout Utilities */
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.flex-row { flex-direction: row; }
-.items-center { align-items: center; }
-.justify-between { justify-content: space-between; }
-.justify-center { justify-content: center; }
-.justify-end { justify-content: flex-end; }
-.gap-2 { gap: 0.5rem; }
-.gap-3 { gap: 0.75rem; }
-.gap-4 { gap: 1rem; }
-.gap-6 { gap: 1.5rem; }
-
-/* Grid System */
-.grid { display: grid; }
-.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-@media (min-width: 640px) {
-  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sm\:flex-row { flex-direction: row; }
+/* Full Width Fluid Layout */
+.app-container {
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin: 0 auto;
 }
 
-@media (min-width: 768px) {
-  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .md\:flex-row { flex-direction: row; }
-  .md\:items-center { align-items: center; }
-}
-
-@media (min-width: 1024px) {
-  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .lg\:flex { display: flex; }
-  .lg\:hidden { display: none; }
-}
-
-/* Form Inputs */
+/* Form Inputs - Spacious & High Visibility */
 .kyvera-input {
   width: 100%;
   background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 0.875rem;
+  padding: 0.85rem 1.15rem;
   color: #0f172a;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -96,45 +69,47 @@ body {
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
-/* Primary Button */
+/* Buttons - Large & High Contrast */
 .kyvera-btn-primary {
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: #ffffff;
-  font-weight: 700;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.5rem;
+  font-weight: 800;
+  border-radius: 0.875rem;
+  padding: 0.85rem 1.75rem;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  font-size: 0.95rem;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
 }
 
 .kyvera-btn-primary:hover {
   background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+  transform: translateY(-1px);
 }
 
 .kyvera-btn-primary:active {
   transform: translateY(1px);
 }
 
-/* Secondary Button */
 .kyvera-btn-secondary {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
+  border: 1.5px solid #cbd5e1;
   color: #334155;
-  font-weight: 600;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  border-radius: 0.875rem;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   transition: all 0.2s ease;
 }
 
@@ -142,40 +117,56 @@ body {
   background: #f8fafc;
   border-color: #0284c7;
   color: #0284c7;
+  transform: translateY(-1px);
 }
 
 /* Clean Badges */
 .badge-emergency {
   background: #ffe4e6;
   color: #e11d48;
-  border: 1px solid #fecdd3;
-  font-weight: 700;
+  border: 1.5px solid #fecdd3;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
 }
 
 .badge-important {
   background: #fef3c7;
   color: #d97706;
-  border: 1px solid #fde68a;
-  font-weight: 700;
+  border: 1.5px solid #fde68a;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
 }
 
 .badge-general {
   background: #e0f2fe;
   color: #0369a1;
-  border: 1px solid #bae6fd;
-  font-weight: 700;
+  border: 1.5px solid #bae6fd;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
 }
 
 .badge-success {
   background: #d1fae5;
   color: #047857;
-  border: 1px solid #a7f3d0;
-  font-weight: 700;
+  border: 1.5px solid #a7f3d0;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
 }
 
 .badge-pending {
   background: #fef9c3;
   color: #a16207;
-  border: 1px solid #fef08a;
-  font-weight: 700;
+  border: 1.5px solid #fef08a;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
 }
