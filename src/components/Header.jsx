@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { OrbitLogo } from './OrbitLogo';
-import { RoleSwitcher } from './RoleSwitcher';
 import { useApp } from '../context/AppContext';
-import { Bell, Search, Database, ShieldAlert, Sparkles, X } from 'lucide-react';
+import { Bell, Search, Database, LogOut, User, Globe, Sparkles, X } from 'lucide-react';
 
 export const Header = () => {
-  const { currentUser, notificationCount, setNotificationCount, activityLogs, setActiveTab } = useApp();
+  const { currentUser, logout, notificationCount, setNotificationCount, activityLogs, setActiveTab } = useApp();
   const [showNotifications, setShowNotifications] = useState(false);
 
   return (
@@ -16,26 +15,22 @@ export const Header = () => {
           <OrbitLogo size="sm" showText={true} />
         </div>
 
-        {/* Center Search / Status Pill (Desktop) */}
-        <div className="hidden md:flex items-center gap-3 bg-slate-900/80 px-3.5 py-1.5 rounded-full border border-slate-800 text-xs">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+        {/* Center Domain Pill */}
+        <div className="hidden md:flex items-center gap-3 bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-cyan-500/30 text-xs">
+          <Globe size={13} className="text-cyan-400 animate-pulse" />
           <span className="text-slate-400">Enterprise Node:</span>
-          <span className="font-semibold text-emerald-400">MRA-HQ-ACTIVE</span>
+          <a href="https://MRA.KYVERA.com" className="font-extrabold text-cyan-300 hover:underline">
+            https://MRA.KYVERA.com
+          </a>
           <span className="text-slate-600">|</span>
-          <span className="text-slate-400">SQL Self-Hosted DB:</span>
-          <button 
-            onClick={() => setActiveTab('selfhost')} 
-            className="text-cyan-400 hover:underline font-semibold flex items-center gap-1 cursor-pointer"
-          >
-            <Database size={12} /> Connected
-          </button>
+          <span className="text-emerald-400 font-semibold flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> Self-Hosted SQL Connected
+          </span>
         </div>
 
-        {/* Right Section: Role Switcher, Notifications, User Badge */}
+        {/* Right User Badge & Logout Button (Demo Dropdown Removed as requested) */}
         <div className="flex items-center gap-3">
-          <RoleSwitcher />
-
-          {/* Notifications Button & Popover */}
+          {/* Notifications */}
           <div className="relative">
             <button
               onClick={() => {
@@ -59,7 +54,7 @@ export const Header = () => {
                 <div className="absolute right-0 mt-2 w-80 z-50 rounded-xl glass-panel p-3 shadow-2xl border border-cyan-500/30">
                   <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                     <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <Sparkles size={14} className="text-cyan-400" /> Recent Notifications
+                      <Sparkles size={14} className="text-cyan-400" /> System Notifications
                     </span>
                     <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-white">
                       <X size={14} />
@@ -74,35 +69,33 @@ export const Header = () => {
                           <span>{log.timestamp}</span>
                         </div>
                         <p className="text-slate-200 mt-1 font-medium text-[11px]">{log.details}</p>
-                        <span className="text-[9px] text-slate-400 block mt-0.5">By: {log.updatedBy}</span>
                       </div>
                     ))}
                   </div>
-
-                  <button 
-                    onClick={() => {
-                      setActiveTab('logs');
-                      setShowNotifications(false);
-                    }}
-                    className="w-full mt-3 py-1.5 text-center text-xs font-semibold text-cyan-400 hover:text-cyan-300 bg-slate-900 rounded-lg border border-slate-800"
-                  >
-                    View All Audit Logs →
-                  </button>
                 </div>
               </>
             )}
           </div>
 
-          {/* User Profile Pill */}
-          <div className="hidden sm:flex items-center gap-2.5 pl-2 border-l border-slate-800">
+          {/* Active User Account Badge */}
+          <div className="flex items-center gap-2.5 pl-2 border-l border-slate-800">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-600 to-emerald-600 flex items-center justify-center font-extrabold text-white text-xs shadow-md">
               {currentUser.name.split(' ').map(n => n[0]).join('')}
             </div>
-            <div className="flex flex-col text-left">
+            <div className="hidden sm:flex flex-col text-left">
               <span className="text-xs font-bold text-slate-100">{currentUser.name}</span>
-              <span className="text-[10px] text-slate-400">{currentUser.empId} • {currentUser.dept}</span>
+              <span className="text-[10px] text-cyan-400 font-semibold">{currentUser.title}</span>
             </div>
           </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={logout}
+            className="p-2 rounded-lg bg-slate-900 hover:bg-rose-950/80 border border-slate-800 hover:border-rose-800 text-slate-300 hover:text-rose-300 transition-all cursor-pointer"
+            title="Switch / Log Out Account"
+          >
+            <LogOut size={16} />
+          </button>
         </div>
       </div>
     </header>

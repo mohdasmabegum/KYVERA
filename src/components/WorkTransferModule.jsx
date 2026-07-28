@@ -17,7 +17,8 @@ import {
   Clock,
   UserCheck,
   Building2,
-  AlertTriangle
+  AlertTriangle,
+  User
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -110,12 +111,6 @@ export const WorkTransferModule = () => {
     return 1;
   };
 
-  // Counts for bottom summary bar
-  const countRequested = visibleTasks.filter(t => t.status === 'Assigned').length;
-  const countAccepted = visibleTasks.filter(t => t.status === 'Accepted').length;
-  const countInProgress = visibleTasks.filter(t => t.status === 'In Progress').length;
-  const countCompleted = visibleTasks.filter(t => t.status === 'Completed').length;
-
   const activeStep = selectedTask ? getTaskStep(selectedTask) : 1;
 
   return (
@@ -164,10 +159,8 @@ export const WorkTransferModule = () => {
 
         {/* 4 Connected Circular Step Nodes with Connecting Bar */}
         <div className="relative max-w-3xl mx-auto py-4">
-          {/* Connecting Background Line */}
           <div className="absolute top-1/2 left-10 right-10 -translate-y-1/2 h-1 bg-slate-800 rounded-full z-0" />
 
-          {/* Connected Progress Color Fill Line */}
           <div 
             className="absolute top-1/2 left-10 -translate-y-1/2 h-1 bg-gradient-to-r from-blue-500 via-emerald-500 to-amber-500 rounded-full z-0 transition-all duration-500"
             style={{ 
@@ -175,9 +168,8 @@ export const WorkTransferModule = () => {
             }}
           />
 
-          {/* Stepper Nodes */}
           <div className="relative z-10 flex items-center justify-between">
-            {/* Step 1: REQUESTED (Blue) */}
+            {/* Step 1: REQUESTED */}
             <div className="flex flex-col items-center gap-2">
               <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                 activeStep >= 1 
@@ -194,7 +186,7 @@ export const WorkTransferModule = () => {
               </span>
             </div>
 
-            {/* Step 2: ACCEPTED (Green) */}
+            {/* Step 2: ACCEPTED */}
             <div className="flex flex-col items-center gap-2">
               <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                 activeStep >= 2 
@@ -211,7 +203,7 @@ export const WorkTransferModule = () => {
               </span>
             </div>
 
-            {/* Step 3: IN PROGRESS (Amber) */}
+            {/* Step 3: IN PROGRESS */}
             <div className="flex flex-col items-center gap-2">
               <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                 activeStep >= 3 
@@ -228,7 +220,7 @@ export const WorkTransferModule = () => {
               </span>
             </div>
 
-            {/* Step 4: COMPLETED (Purple) */}
+            {/* Step 4: COMPLETED */}
             <div className="flex flex-col items-center gap-2">
               <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                 activeStep >= 4 
@@ -247,13 +239,10 @@ export const WorkTransferModule = () => {
           </div>
         </div>
 
-        {/* 4 Cards Array matching uploaded layout */}
+        {/* 4 Cards Array */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: REQUESTED */}
           <div className={`p-4 rounded-xl border transition-all ${
-            activeStep >= 1 
-              ? 'bg-blue-950/20 border-blue-500/40 shadow-lg' 
-              : 'bg-slate-900/40 border-slate-800 opacity-60'
+            activeStep >= 1 ? 'bg-blue-950/20 border-blue-500/40 shadow-lg' : 'bg-slate-900/40 border-slate-800 opacity-60'
           }`}>
             <div className="flex items-center gap-2 text-blue-400 font-extrabold text-xs mb-2">
               <FileText size={16} /> REQUESTED
@@ -268,11 +257,8 @@ export const WorkTransferModule = () => {
             </div>
           </div>
 
-          {/* Card 2: ACCEPTED */}
           <div className={`p-4 rounded-xl border transition-all ${
-            activeStep >= 2 
-              ? 'bg-emerald-950/20 border-emerald-500/40 shadow-lg' 
-              : 'bg-slate-900/40 border-slate-800 opacity-60'
+            activeStep >= 2 ? 'bg-emerald-950/20 border-emerald-500/40 shadow-lg' : 'bg-slate-900/40 border-slate-800 opacity-60'
           }`}>
             <div className="flex items-center gap-2 text-emerald-400 font-extrabold text-xs mb-2">
               <CheckCircle2 size={16} /> ACCEPTED
@@ -287,11 +273,8 @@ export const WorkTransferModule = () => {
             </div>
           </div>
 
-          {/* Card 3: IN PROGRESS */}
           <div className={`p-4 rounded-xl border transition-all ${
-            activeStep >= 3 
-              ? 'bg-amber-950/20 border-amber-500/40 shadow-lg' 
-              : 'bg-slate-900/40 border-slate-800 opacity-60'
+            activeStep >= 3 ? 'bg-amber-950/20 border-amber-500/40 shadow-lg' : 'bg-slate-900/40 border-slate-800 opacity-60'
           }`}>
             <div className="flex items-center gap-2 text-amber-400 font-extrabold text-xs mb-2">
               <Settings size={16} /> IN PROGRESS
@@ -306,11 +289,8 @@ export const WorkTransferModule = () => {
             </div>
           </div>
 
-          {/* Card 4: COMPLETED */}
           <div className={`p-4 rounded-xl border transition-all ${
-            activeStep >= 4 
-              ? 'bg-purple-950/20 border-purple-500/40 shadow-lg' 
-              : 'bg-slate-900/40 border-slate-800 opacity-60'
+            activeStep >= 4 ? 'bg-purple-950/20 border-purple-500/40 shadow-lg' : 'bg-slate-900/40 border-slate-800 opacity-60'
           }`}>
             <div className="flex items-center gap-2 text-purple-400 font-extrabold text-xs mb-2">
               <Flag size={16} /> COMPLETED
@@ -326,7 +306,7 @@ export const WorkTransferModule = () => {
           </div>
         </div>
 
-        {/* Selected Task Details & Hardware/Doc Verification */}
+        {/* Selected Task Details */}
         {selectedTask && (
           <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
             <div className="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
@@ -356,7 +336,7 @@ export const WorkTransferModule = () => {
               </div>
             </div>
 
-            {/* Action buttons for receiver */}
+            {/* Action buttons */}
             <div className="flex items-center justify-end gap-2 pt-2">
               {selectedTask.status === 'Assigned' && (
                 <>
@@ -410,38 +390,52 @@ export const WorkTransferModule = () => {
           </div>
         )}
 
-        {/* Bottom Summary & Last Updated Bar (Exact matching design from image) */}
-        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          {/* Left Pill Summary */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2 text-xs font-bold text-white">
-              <BarChart3 size={16} className="text-cyan-400" />
-              <span>REQUEST SUMMARY</span>
-            </div>
-            <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+        {/* Bottom Summary Updated with Specific Person Names and Dept Names */}
+        <div className="p-4 rounded-xl bg-slate-900/95 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+          <div className="flex items-center gap-3">
+            <BarChart3 size={16} className="text-cyan-400" />
+            <div className="text-xs font-bold text-white uppercase tracking-wider">REQUEST PROGRESS SUMMARY</div>
+          </div>
 
-            <div className="flex items-center gap-4 text-xs font-semibold flex-wrap">
-              <span className="flex items-center gap-1.5 text-blue-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" /> Requested: <strong className="text-white">{countRequested}</strong>
-              </span>
-              <span className="flex items-center gap-1.5 text-emerald-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Accepted: <strong className="text-white">{countAccepted}</strong>
-              </span>
-              <span className="flex items-center gap-1.5 text-amber-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> In Progress: <strong className="text-white">{countInProgress}</strong>
-              </span>
-              <span className="flex items-center gap-1.5 text-purple-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-500" /> Completed: <strong className="text-white">{countCompleted}</strong>
-              </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs flex-1 max-w-4xl">
+            <div className="p-2.5 rounded-lg bg-slate-950 border border-blue-500/30 flex items-center gap-2">
+              <User size={14} className="text-blue-400" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-semibold">Requested By:</span>
+                <span className="font-extrabold text-blue-300">{selectedTask ? selectedTask.assignerName : 'Vikram Seth'}</span>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-slate-950 border border-emerald-500/30 flex items-center gap-2">
+              <UserCheck size={14} className="text-emerald-400" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-semibold">Accepted By:</span>
+                <span className="font-extrabold text-emerald-300">{selectedTask ? selectedTask.assignedEmpName : 'Suresh Kumar'}</span>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-slate-950 border border-amber-500/30 flex items-center gap-2">
+              <Building2 size={14} className="text-amber-400" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-semibold">In Progress In Dept:</span>
+                <span className="font-extrabold text-amber-300">{selectedTask ? selectedTask.toDept : 'Engineering'}</span>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-slate-950 border border-purple-500/30 flex items-center gap-2">
+              <Flag size={14} className="text-purple-400" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-semibold">Completed By Dept:</span>
+                <span className="font-extrabold text-purple-300">{selectedTask?.status === 'Completed' ? selectedTask.toDept : 'Quality Assurance'}</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Last Updated */}
           <div className="flex items-center gap-2 text-xs text-slate-400 border-t md:border-t-0 pt-2 md:pt-0 border-slate-800">
             <Calendar size={15} className="text-cyan-400" />
             <div>
-              <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">LAST UPDATED</span>
-              <span className="font-bold text-white text-xs">
+              <span className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">LAST UPDATED</span>
+              <span className="font-bold text-white text-[11px]">
                 {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}, {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
               </span>
             </div>

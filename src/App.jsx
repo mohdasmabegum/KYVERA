@@ -1,38 +1,30 @@
 import React from 'react';
-import { AppProvider, useApp } from './context/AppContext';
+import { useApp } from './context/AppContext';
+import { LoginPage } from './components/LoginPage';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 
-// Dashboards
-import { AdminDashboard } from './components/Dashboards/AdminDashboard';
-import { EmployeeDashboard } from './components/Dashboards/EmployeeDashboard';
-import { InventoryDashboard } from './components/Dashboards/InventoryDashboard';
-
 // Modules
+import { AdminDashboard } from './components/Dashboards/AdminDashboard';
 import { LeaveModule } from './components/LeaveModule';
 import { MaterialModule } from './components/MaterialModule';
 import { WorkTransferModule } from './components/WorkTransferModule';
 import { ActivityLogsModule } from './components/ActivityLogsModule';
 import { SelfHostModule } from './components/SelfHostModule';
 
-const MainContent = () => {
-  const { activeTab, currentRoleKey } = useApp();
+export function App() {
+  const { isAuthenticated, activeTab } = useApp();
 
-  const renderDashboard = () => {
-    if (currentRoleKey === 'EMPLOYEE') {
-      return <EmployeeDashboard />;
-    }
-    if (currentRoleKey === 'INVENTORY') {
-      return <InventoryDashboard />;
-    }
-    return <AdminDashboard />;
-  };
+  // If not authenticated, render LoginPage
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
-  const renderActiveModule = () => {
+  const renderTabContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return renderDashboard();
+        return <AdminDashboard />;
       case 'leave':
         return <LeaveModule />;
       case 'material':
@@ -44,28 +36,30 @@ const MainContent = () => {
       case 'selfhost':
         return <SelfHostModule />;
       default:
-        return renderDashboard();
+        return <AdminDashboard />;
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-kyvera-dark text-slate-100 pb-20 md:pb-8">
+    <div className="min-h-screen bg-kyvera-dark text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-white">
+      {/* Top Header */}
       <Header />
-      <div className="flex flex-1 max-w-7xl w-full mx-auto px-4 py-6 gap-6">
+
+      {/* Main Layout Area */}
+      <div className="flex-1 flex max-w-7xl w-full mx-auto pb-16 lg:pb-6">
+        {/* Desktop Sidebar */}
         <Sidebar />
-        <main className="flex-1 w-full min-w-0">
-          {renderActiveModule()}
+
+        {/* Dynamic Page Content */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+          {renderTabContent()}
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation Bar */}
       <MobileNav />
     </div>
   );
-};
-
-export default function App() {
-  return (
-    <AppProvider>
-      <MainContent />
-    </AppProvider>
-  );
 }
+
+export default App;
