@@ -1,31 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { OrbitLogo } from './OrbitLogo';
 import { Sparkles, Shield } from 'lucide-react';
 
 export const SplashScreen = ({ onFinish }) => {
   const [progress, setProgress] = useState(0);
+  const onFinishRef = useRef(onFinish);
 
   useEffect(() => {
-    // 3-second timer progress animation (3000ms)
+    onFinishRef.current = onFinish;
+  }, [onFinish]);
+
+  useEffect(() => {
+    // 3-second progress animation (3000ms)
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           return 100;
         }
-        return prev + 3.33; // 100% over 30 steps (3 seconds)
+        return prev + 3.33;
       });
     }, 100);
 
     const timer = setTimeout(() => {
-      if (onFinish) onFinish();
+      if (onFinishRef.current) {
+        onFinishRef.current();
+      }
     }, 3000);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timer);
     };
-  }, [onFinish]);
+  }, []); // Run ONCE on mount!
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#070E17] text-white p-6 selection:bg-cyan-500 overflow-hidden">

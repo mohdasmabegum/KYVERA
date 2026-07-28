@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useApp } from './context/AppContext';
 import { SplashScreen } from './components/SplashScreen';
 import { AuthPortal } from './components/AuthPortal';
@@ -18,9 +18,13 @@ export function App() {
   const { isAuthenticated, activeTab } = useApp();
   const [showSplash, setShowSplash] = useState(true);
 
+  const handleSplashFinish = useCallback(() => {
+    setShowSplash(false);
+  }, []);
+
   // Render 3-second Splash Screen on initial load
   if (showSplash) {
-    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+    return <SplashScreen onFinish={handleSplashFinish} />;
   }
 
   // If not authenticated, render AuthPortal (Sign In / Register)
