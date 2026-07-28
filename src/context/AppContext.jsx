@@ -3,12 +3,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AppContext = createContext();
 
 export const ROLES = {
+  TEAM_LEAD: { id: 'TEAM_LEAD', title: 'Team Lead / Sub-TL', name: 'Arjun Mehta', empId: 'MRA-004', dept: 'Engineering' },
+  INVENTORY: { id: 'INVENTORY', title: 'Inventory Manager', name: 'Priya Nair', empId: 'MRA-006', dept: 'Supply Chain' },
+  EMPLOYEE: { id: 'EMPLOYEE', title: 'Normal Employee', name: 'Suresh Kumar', empId: 'MRA-005', dept: 'Engineering' },
+  COORDINATOR: { id: 'COORDINATOR', title: 'Project Coordinator', name: 'Vikram Seth', empId: 'MRA-003', dept: 'Operations' },
   CEO: { id: 'CEO', title: 'CEO / Founder / Director', name: 'Dr. Rajesh Varma', empId: 'MRA-001', dept: 'Executive' },
   HR: { id: 'HR', title: 'HR Manager', name: 'Ananya Sharma', empId: 'MRA-002', dept: 'Human Resources' },
-  COORDINATOR: { id: 'COORDINATOR', title: 'Project Coordinator', name: 'Vikram Seth', empId: 'MRA-003', dept: 'Operations' },
-  TEAM_LEAD: { id: 'TEAM_LEAD', title: 'Team Lead / Sub-TL', name: 'Arjun Mehta', empId: 'MRA-004', dept: 'Engineering' },
-  EMPLOYEE: { id: 'EMPLOYEE', title: 'Normal Employee', name: 'Suresh Kumar', empId: 'MRA-005', dept: 'Engineering' },
-  INVENTORY: { id: 'INVENTORY', title: 'Inventory Manager', name: 'Priya Nair', empId: 'MRA-006', dept: 'Supply Chain' },
 };
 
 const INITIAL_DEPARTMENTS = [
@@ -204,9 +204,19 @@ const INITIAL_ACTIVITY_LOGS = [
 ];
 
 export const AppProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [currentRoleKey, setCurrentRoleKey] = useState('CEO');
-  const [currentUser, setCurrentUser] = useState(ROLES.CEO);
+  // Saved Auth User Check
+  const [savedUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kyvera_auth_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => !!savedUser);
+  const [currentRoleKey, setCurrentRoleKey] = useState(() => savedUser?.id || 'TEAM_LEAD');
+  const [currentUser, setCurrentUser] = useState(() => savedUser || ROLES.TEAM_LEAD);
 
   const [employees, setEmployees] = useState(() => {
     const saved = localStorage.getItem('kyvera_employees');
@@ -240,7 +250,6 @@ export const AppProvider = ({ children }) => {
 
   const [departments] = useState(INITIAL_DEPARTMENTS);
 
-  // Default page per role
   const getDefaultTabForRole = (roleKey) => {
     if (roleKey === 'HR') return 'leave';
     if (roleKey === 'INVENTORY') return 'material';
@@ -248,10 +257,10 @@ export const AppProvider = ({ children }) => {
     return 'dashboard';
   };
 
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(() => getDefaultTabForRole(currentRoleKey));
   const [notificationCount, setNotificationCount] = useState(2);
 
-  // Dynamic Login Handler
+  // Dynamic Login Handler with Persistence
   const loginAsUser = (email, roleKey) => {
     const foundEmp = employees.find(e => e.email.toLowerCase() === email.toLowerCase());
     const targetRole = roleKey || (foundEmp ? foundEmp.role : 'EMPLOYEE');
@@ -268,10 +277,11 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(userObj);
     setIsAuthenticated(true);
     setActiveTab(getDefaultTabForRole(targetRole));
+    localStorage.setItem('kyvera_auth_user', JSON.stringify(userObj));
     return true;
   };
 
-  // Register New User Handler
+  // Register New User Handler with Persistence
   const registerUser = (userData) => {
     const newEmp = {
       id: userData.empId || `MRA-${Date.now().toString().slice(-4)}`,
@@ -297,11 +307,13 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(userObj);
     setIsAuthenticated(true);
     setActiveTab(getDefaultTabForRole(userData.role));
+    localStorage.setItem('kyvera_auth_user', JSON.stringify(userObj));
     return newEmp;
   };
 
   const logout = () => {
     setIsAuthenticated(false);
+    localStorage.removeItem('kyvera_auth_user');
   };
 
   // LocalStorage Sync

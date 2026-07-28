@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useApp } from './context/AppContext';
+import { SplashScreen } from './components/SplashScreen';
 import { AuthPortal } from './components/AuthPortal';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -14,12 +15,23 @@ import { ActivityLogsModule } from './components/ActivityLogsModule';
 
 export function App() {
   const { isAuthenticated, activeTab } = useApp();
+  const [showSplash, setShowSplash] = useState(true);
 
-  // If not authenticated, render AuthPortal (Sign In / Register)
+  const handleSplashFinish = useCallback(() => {
+    setShowSplash(false);
+  }, []);
+
+  // 1. Show clean 2-second Splash Screen on initial app load
+  if (showSplash) {
+    return <SplashScreen onFinish={handleSplashFinish} />;
+  }
+
+  // 2. Redirect to Login / Register Portal if not logged in
   if (!isAuthenticated) {
     return <AuthPortal />;
   }
 
+  // 3. Render authenticated Dashboard Module
   const renderTabContent = () => {
     switch (activeTab) {
       case 'dashboard':
