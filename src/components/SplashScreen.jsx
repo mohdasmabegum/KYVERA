@@ -36,18 +36,18 @@ export const SplashScreen = ({ onFinish }) => {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-50 text-slate-900 p-6 selection:bg-cyan-500 overflow-hidden">
       <div className="relative z-10 flex flex-col items-center text-center space-y-6 max-w-sm w-full">
-        {/* Clean Brand Logo */}
-        <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xl">
-          <OrbitLogo size="lg" showText={false} />
+        {/* Dark App Icon Emblem */}
+        <div className="p-4 rounded-3xl bg-white border border-slate-200 shadow-xl">
+          <OrbitLogo size="lg" variant="icon" />
         </div>
 
         {/* Brand Title */}
         <div className="space-y-1">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 flex items-center justify-center gap-2">
-            KYVERA <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-800 border border-cyan-300 font-extrabold">BY MRA</span>
+            KYVERA <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-300 font-extrabold">MRA</span>
           </h1>
-          <p className="text-xs text-slate-500 font-bold tracking-wide uppercase">
-            ENTERPRISE WORKFORCE & MATERIAL OPERATIONS
+          <p className="text-xs text-slate-500 font-extrabold tracking-widest uppercase">
+            CONNECT • COORDINATE • COMPLETE
           </p>
         </div>
 
@@ -55,12 +55,12 @@ export const SplashScreen = ({ onFinish }) => {
         <div className="w-full space-y-2 pt-2">
           <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
             <div 
-              className="h-full bg-gradient-to-r from-cyan-600 to-teal-600 transition-all duration-100 ease-out"
+              className="h-full bg-gradient-to-r from-blue-600 to-cyan-600 transition-all duration-100 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
           <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono font-bold">
-            <span className="text-cyan-800">Loading Platform...</span>
+            <span className="text-cyan-800">Initializing Platform...</span>
             <span className="text-slate-900">{Math.min(100, Math.round(progress))}%</span>
           </div>
         </div>
