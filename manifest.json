@@ -1,17 +1,17 @@
 {
-  "short_name": "KYVERA",
-  "name": "KYVERA by MRA - Enterprise Workforce & Inventory",
+  "short_name": "KYVERA MRA",
+  "name": "KYVERA MRA - Connect | Coordinate | Complete",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "./app-icon.png",
       "type": "image/png",
       "sizes": "192x192 512x512"
     }
   ],
-  "start_url": "/",
-  "background_color": "#070E17",
-  "theme_color": "#0A192F",
+  "start_url": "./",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "description": "KYVERA by MRA - Enterprise Workforce, Material, Leave & Work Transfer Platform"
+  "description": "KYVERA MRA - Enterprise Workforce, Material, Leave & Work Transfer Platform"
 }
