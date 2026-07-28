@@ -19,8 +19,8 @@ export const Header = () => {
         <div className="hidden md:flex items-center gap-3 bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-cyan-500/30 text-xs">
           <Globe size={13} className="text-cyan-400 animate-pulse" />
           <span className="text-slate-400">Enterprise Node:</span>
-          <a href="https://MRA.KYVERA.com" className="font-extrabold text-cyan-300 hover:underline">
-            https://MRA.KYVERA.com
+          <a href="https://MRA.KYVERA.git" className="font-extrabold text-cyan-300 hover:underline">
+            https://MRA.KYVERA.git
           </a>
           <span className="text-slate-600">|</span>
           <span className="text-emerald-400 font-semibold flex items-center gap-1">
@@ -28,7 +28,7 @@ export const Header = () => {
           </span>
         </div>
 
-        {/* Right User Badge & Logout Button (Demo Dropdown Removed as requested) */}
+        {/* Right User Badge & Logout Button */}
         <div className="flex items-center gap-3">
           {/* Notifications */}
           <div className="relative">

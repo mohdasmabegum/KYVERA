@@ -36,15 +36,12 @@ export const AdminDashboard = () => {
   const [isEmpModalOpen, setIsEmpModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState({ from: '2026-07-01', to: '2026-07-31' });
 
-  // CEO / Coordinator Filters
   const deptEmployees = employees.filter(e => e.dept === selectedDept || selectedDept === 'All');
   const selectedEmp = employees.find(e => e.id === selectedEmpId) || employees[4];
 
-  // Specific employee tasks for drill-down modal
   const empWorkTasks = workAssignments.filter(w => w.assignedEmpId === selectedEmpId || w.assignedEmpName === selectedEmp.name);
   const empLeaves = leaveRequests.filter(l => l.empId === selectedEmpId || l.empName === selectedEmp.name);
 
-  // Metrics
   const activeLeavesCount = leaveRequests.filter(l => l.status === 'Approved').length;
   const pendingOrdersCount = materialRequests.filter(m => m.status === 'Pending for Order').length;
   const activeTasksCount = workAssignments.filter(w => w.status === 'Accepted' || w.status === 'In Progress').length;
@@ -56,7 +53,7 @@ export const AdminDashboard = () => {
       <div className="p-6 rounded-2xl glass-panel border border-cyan-500/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <Building2 size={16} /> Enterprise Operations Center • https://MRA.KYVERA.com
+            <Building2 size={16} /> Enterprise Operations Center • https://MRA.KYVERA.git
           </div>
           <h1 className="text-2xl font-extrabold text-white mt-1">Executive & Workload Analytics</h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -239,7 +236,6 @@ export const AdminDashboard = () => {
           icon={Users}
         >
           <div className="space-y-4">
-            {/* Header info */}
             <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div><span className="text-slate-400 block text-[10px]">Employee ID</span><strong className="text-white">{selectedEmp.id}</strong></div>
               <div><span className="text-slate-400 block text-[10px]">Department</span><strong className="text-cyan-400">{selectedEmp.dept}</strong></div>
@@ -247,7 +243,6 @@ export const AdminDashboard = () => {
               <div><span className="text-slate-400 block text-[10px]">Email</span><span className="text-slate-200">{selectedEmp.email}</span></div>
             </div>
 
-            {/* Date Range Filter */}
             <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs flex-wrap">
               <span className="font-bold text-slate-300">Filter Date Range:</span>
               <input
@@ -265,7 +260,6 @@ export const AdminDashboard = () => {
               />
             </div>
 
-            {/* Historical Accepted Work Request List */}
             <div className="space-y-2">
               <div className="text-xs font-bold text-white uppercase tracking-wider">
                 Work Requests Log ({empWorkTasks.length})

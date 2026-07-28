@@ -19,17 +19,13 @@ import confetti from 'canvas-confetti';
 export const AuthPortal = () => {
   const { loginAsUser, registerUser, departments } = useApp();
 
-  // Portal Type: 'EMPLOYEE' or 'ORGANIZATION'
   const [portalType, setPortalType] = useState('EMPLOYEE');
-  // Auth Mode: 'LOGIN' or 'REGISTER'
   const [authMode, setAuthMode] = useState('LOGIN');
 
-  // Login Form State
   const [loginEmail, setLoginEmail] = useState('suresh@mra.kyvera.com');
   const [loginPassword, setLoginPassword] = useState('••••••••');
   const [loginRoleKey, setLoginRoleKey] = useState('EMPLOYEE');
 
-  // Employee Registration Form State
   const [empRegData, setEmpRegData] = useState({
     name: '',
     empId: `MRA-${Math.floor(100 + Math.random() * 900)}`,
@@ -39,7 +35,6 @@ export const AuthPortal = () => {
     password: ''
   });
 
-  // Organization Registration Form State
   const [orgRegData, setOrgRegData] = useState({
     name: '',
     orgName: 'MRA Enterprise Systems',
@@ -51,7 +46,6 @@ export const AuthPortal = () => {
 
   const [message, setMessage] = useState('');
 
-  // Handle Portal Switcher
   const handlePortalSwitch = (type) => {
     setPortalType(type);
     setMessage('');
@@ -64,7 +58,6 @@ export const AuthPortal = () => {
     }
   };
 
-  // Quick Demo Account Select
   const handleDemoAccountSelect = (roleKey) => {
     const roleMap = {
       CEO: { email: 'ceo@mra.kyvera.com', portal: 'ORGANIZATION' },
@@ -82,7 +75,6 @@ export const AuthPortal = () => {
     setAuthMode('LOGIN');
   };
 
-  // Handle Login Submission
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     const success = loginAsUser(loginEmail, loginRoleKey);
@@ -91,7 +83,6 @@ export const AuthPortal = () => {
     }
   };
 
-  // Handle Employee Registration Submission
   const handleEmpRegisterSubmit = (e) => {
     e.preventDefault();
     if (!empRegData.name || !empRegData.email) {
@@ -112,7 +103,6 @@ export const AuthPortal = () => {
     setMessage(`Employee registration successful! Welcome ${newUser.name}.`);
   };
 
-  // Handle Organization Registration Submission
   const handleOrgRegisterSubmit = (e) => {
     e.preventDefault();
     if (!orgRegData.name || !orgRegData.email) {
@@ -147,11 +137,11 @@ export const AuthPortal = () => {
         <div className="flex flex-col items-center text-center space-y-2">
           <OrbitLogo size="lg" showText={true} />
           <p className="text-xs text-slate-400">
-            Enterprise Portal • <span className="text-cyan-400 font-bold">https://MRA.KYVERA.com</span>
+            Enterprise Portal • <span className="text-cyan-400 font-bold">https://MRA.KYVERA.git</span>
           </p>
         </div>
 
-        {/* Primary Portal Switcher (Employee vs Organization) */}
+        {/* Primary Portal Switcher */}
         <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-slate-950 border border-slate-800">
           <button
             type="button"
@@ -178,7 +168,7 @@ export const AuthPortal = () => {
           </button>
         </div>
 
-        {/* Sub-Tabs (Sign In vs Register) */}
+        {/* Sub-Tabs */}
         <div className="flex items-center justify-center border-b border-slate-800 pb-2">
           <div className="flex items-center gap-4 text-xs font-bold">
             <button
@@ -209,7 +199,7 @@ export const AuthPortal = () => {
           </div>
         )}
 
-        {/* ==================== LOGIN FORM ==================== */}
+        {/* LOGIN FORM */}
         {authMode === 'LOGIN' && (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
@@ -273,7 +263,7 @@ export const AuthPortal = () => {
           </form>
         )}
 
-        {/* ==================== EMPLOYEE REGISTER FORM ==================== */}
+        {/* EMPLOYEE REGISTER FORM */}
         {authMode === 'REGISTER' && portalType === 'EMPLOYEE' && (
           <form onSubmit={handleEmpRegisterSubmit} className="space-y-4">
             <div>
@@ -361,7 +351,7 @@ export const AuthPortal = () => {
           </form>
         )}
 
-        {/* ==================== ORGANIZATION REGISTER FORM ==================== */}
+        {/* ORGANIZATION REGISTER FORM */}
         {authMode === 'REGISTER' && portalType === 'ORGANIZATION' && (
           <form onSubmit={handleOrgRegisterSubmit} className="space-y-4">
             <div>

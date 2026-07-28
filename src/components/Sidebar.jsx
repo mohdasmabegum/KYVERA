@@ -18,7 +18,7 @@ export const Sidebar = () => {
 
   const role = currentUser.id; // CEO, HR, COORDINATOR, TEAM_LEAD, EMPLOYEE, INVENTORY
 
-  // Tab Definitions (Added 'HR' to 'work' tab so HR can view Employee Work Track Logs)
+  // Tab Definitions
   const allTabs = [
     { id: 'dashboard', name: 'Executive Overview', icon: LayoutDashboard, roles: ['CEO', 'COORDINATOR', 'TEAM_LEAD'] },
     { id: 'work', name: 'Work Tracking System', icon: ArrowLeftRight, roles: ['CEO', 'COORDINATOR', 'TEAM_LEAD', 'HR', 'EMPLOYEE'] },
@@ -72,8 +72,8 @@ export const Sidebar = () => {
       {/* Footer Branding */}
       <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[10px] text-slate-500 text-center space-y-1">
         <div>KYVERA Framework v2.4</div>
-        <a href="https://MRA.KYVERA.com" className="text-cyan-400 font-bold hover:underline block">
-          https://MRA.KYVERA.com
+        <a href="https://MRA.KYVERA.git" className="text-cyan-400 font-bold hover:underline block">
+          https://MRA.KYVERA.git
         </a>
       </div>
     </aside>
