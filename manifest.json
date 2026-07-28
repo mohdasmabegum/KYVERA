@@ -1,17 +1,35 @@
 {
-  "short_name": "KYVERA",
-  "name": "KYVERA by MRA - Enterprise Workforce & Inventory",
-  "icons": [
-    {
-      "src": "/logo.png",
-      "type": "image/png",
-      "sizes": "192x192 512x512"
-    }
-  ],
-  "start_url": "/",
-  "background_color": "#070E17",
-  "theme_color": "#0A192F",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "description": "KYVERA by MRA - Enterprise Workforce, Material, Leave & Work Transfer Platform"
+    "name": "kyvera_mra",
+    "short_name": "kyvera_mra",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "A new Flutter project.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
 }
