@@ -3,16 +3,12 @@ import { useApp, ROLES } from '../context/AppContext';
 import { OrbitLogo } from './OrbitLogo';
 import { 
   Building2, 
-  UserCheck, 
   Mail, 
   Lock, 
   User, 
-  ShieldCheck, 
   ArrowRight, 
-  Briefcase, 
   Sparkles,
-  CheckCircle2,
-  Users
+  CheckCircle2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -141,14 +137,11 @@ export const AuthPortal = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50 selection:bg-cyan-500">
-      <div className="w-full max-w-xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
+      <div className="w-full max-w-lg bg-white p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
         {/* Header Logo */}
         <div className="flex flex-col items-center text-center space-y-2">
           <OrbitLogo size="lg" showText={true} />
-          <p className="text-xs text-slate-500 font-medium">
-            Single Sign-On Security • <span className="text-cyan-600 font-bold">KYVERA by MRA</span>
-          </p>
         </div>
 
         {/* Primary Portal Switcher */}
@@ -158,11 +151,11 @@ export const AuthPortal = () => {
             onClick={() => handlePortalSwitch('EMPLOYEE')}
             className={`py-3 px-4 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all cursor-pointer ${
               portalType === 'EMPLOYEE'
-                ? 'bg-gradient-to-r from-cyan-600 to-cyan-500 text-white shadow-md'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-cyan-700 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 font-semibold'
             }`}
           >
-            <User size={16} /> Employee Login Portal
+            <User size={16} /> Employee Portal
           </button>
 
           <button
@@ -170,8 +163,8 @@ export const AuthPortal = () => {
             onClick={() => handlePortalSwitch('ORGANIZATION')}
             className={`py-3 px-4 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all cursor-pointer ${
               portalType === 'ORGANIZATION'
-                ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-md'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-teal-700 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 font-semibold'
             }`}
           >
             <Building2 size={16} /> Organization Portal
@@ -179,12 +172,12 @@ export const AuthPortal = () => {
         </div>
 
         {/* Sub-Tabs */}
-        <div className="flex items-center justify-center border-b border-slate-200 pb-2">
-          <div className="flex items-center gap-4 text-xs font-bold">
+        <div className="flex items-center justify-center border-b border-slate-200 pb-3">
+          <div className="flex items-center gap-6 text-xs font-bold">
             <button
               onClick={() => { setAuthMode('LOGIN'); setMessage(''); }}
               className={`pb-1 transition-all cursor-pointer ${
-                authMode === 'LOGIN' ? 'text-cyan-600 border-b-2 border-cyan-600 font-extrabold' : 'text-slate-500 hover:text-slate-900'
+                authMode === 'LOGIN' ? 'text-cyan-700 border-b-2 border-cyan-700 font-extrabold' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               Sign In
@@ -193,7 +186,7 @@ export const AuthPortal = () => {
             <button
               onClick={() => { setAuthMode('REGISTER'); setMessage(''); }}
               className={`pb-1 transition-all cursor-pointer ${
-                authMode === 'REGISTER' ? 'text-teal-600 border-b-2 border-teal-600 font-extrabold' : 'text-slate-500 hover:text-slate-900'
+                authMode === 'REGISTER' ? 'text-teal-700 border-b-2 border-teal-700 font-extrabold' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               Register New Account
@@ -203,8 +196,8 @@ export const AuthPortal = () => {
 
         {/* Feedback Message Alert */}
         {message && (
-          <div className="p-3 rounded-xl bg-cyan-50 border border-cyan-200 text-xs text-cyan-800 font-medium flex items-center gap-2">
-            <Sparkles size={16} className="text-cyan-600" />
+          <div className="p-3.5 rounded-xl bg-cyan-50 border border-cyan-200 text-xs text-cyan-900 font-bold flex items-center gap-2">
+            <Sparkles size={16} className="text-cyan-700" />
             <span>{message}</span>
           </div>
         )}
@@ -213,40 +206,40 @@ export const AuthPortal = () => {
         {authMode === 'LOGIN' && (
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Corporate Email Address</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Corporate Email Address</label>
               <div className="relative">
-                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="email"
                   required
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  className="kyvera-input pl-9"
+                  className="kyvera-input pl-10"
                   placeholder="name@mra.kyvera.com"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Password</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Password</label>
               <div className="relative">
-                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="password"
                   required
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  className="kyvera-input pl-9"
+                  className="kyvera-input pl-10"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Target Persona / Designation</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Target Designation</label>
               <select
                 value={loginRoleKey}
                 onChange={(e) => setLoginRoleKey(e.target.value)}
-                className="kyvera-input font-medium"
+                className="kyvera-input font-semibold text-slate-800"
               >
                 {portalType === 'EMPLOYEE' ? (
                   <>
@@ -266,9 +259,9 @@ export const AuthPortal = () => {
 
             <button
               type="submit"
-              className="w-full kyvera-btn-primary py-3 text-sm font-bold shadow-lg mt-2"
+              className="w-full kyvera-btn-primary py-3.5 text-sm font-extrabold shadow-md mt-2"
             >
-              Sign In to {portalType === 'EMPLOYEE' ? 'Employee Portal' : 'Organization Portal'} <ArrowRight size={16} />
+              Sign In to {portalType === 'EMPLOYEE' ? 'Employee Portal' : 'Organization Portal'} <ArrowRight size={18} />
             </button>
           </form>
         )}
@@ -277,7 +270,7 @@ export const AuthPortal = () => {
         {authMode === 'REGISTER' && portalType === 'EMPLOYEE' && (
           <form onSubmit={handleEmpRegisterSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Full Employee Name *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Full Employee Name *</label>
               <input
                 type="text"
                 required
@@ -290,7 +283,7 @@ export const AuthPortal = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Employee ID *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Employee ID *</label>
                 <input
                   type="text"
                   required
@@ -301,7 +294,7 @@ export const AuthPortal = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Department *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Department *</label>
                 <select
                   value={empRegData.dept}
                   onChange={(e) => setEmpRegData({ ...empRegData, dept: e.target.value })}
@@ -316,7 +309,7 @@ export const AuthPortal = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Role Type *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Role Type *</label>
                 <select
                   value={empRegData.role}
                   onChange={(e) => setEmpRegData({ ...empRegData, role: e.target.value })}
@@ -329,7 +322,7 @@ export const AuthPortal = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Corporate Email *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Corporate Email *</label>
                 <input
                   type="email"
                   required
@@ -342,7 +335,7 @@ export const AuthPortal = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Set Password *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Set Password *</label>
               <input
                 type="password"
                 required
@@ -355,9 +348,9 @@ export const AuthPortal = () => {
 
             <button
               type="submit"
-              className="w-full kyvera-btn-primary py-3 text-sm font-bold shadow-lg"
+              className="w-full kyvera-btn-primary py-3.5 text-sm font-extrabold shadow-md"
             >
-              Complete Employee Registration <CheckCircle2 size={16} />
+              Complete Employee Registration <CheckCircle2 size={18} />
             </button>
           </form>
         )}
@@ -366,7 +359,7 @@ export const AuthPortal = () => {
         {authMode === 'REGISTER' && portalType === 'ORGANIZATION' && (
           <form onSubmit={handleOrgRegisterSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Executive Full Name *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Executive Full Name *</label>
               <input
                 type="text"
                 required
@@ -379,7 +372,7 @@ export const AuthPortal = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Organization Name *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Organization Name *</label>
                 <input
                   type="text"
                   required
@@ -390,7 +383,7 @@ export const AuthPortal = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Executive Designation *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Executive Designation *</label>
                 <select
                   value={orgRegData.role}
                   onChange={(e) => setOrgRegData({ ...orgRegData, role: e.target.value })}
@@ -404,7 +397,7 @@ export const AuthPortal = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Corporate Email Address *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Corporate Email Address *</label>
               <input
                 type="email"
                 required
@@ -416,7 +409,7 @@ export const AuthPortal = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Set Password *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Set Password *</label>
               <input
                 type="password"
                 required
@@ -429,39 +422,39 @@ export const AuthPortal = () => {
 
             <button
               type="submit"
-              className="w-full kyvera-btn-primary py-3 text-sm font-bold shadow-lg"
+              className="w-full kyvera-btn-primary py-3.5 text-sm font-extrabold shadow-md"
             >
-              Complete Organization Registration <CheckCircle2 size={16} />
+              Complete Organization Registration <CheckCircle2 size={18} />
             </button>
           </form>
         )}
 
         {/* 1-Click Demo Accounts Selector */}
-        <div className="pt-2 border-t border-slate-200 space-y-2">
+        <div className="pt-3 border-t border-slate-200 space-y-2">
           <div className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider text-center">
-            1-Click Demo Account Quick Select
+            1-Click Quick Login Select
           </div>
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-3 gap-2">
             {portalType === 'EMPLOYEE' ? (
               <>
                 <button
                   type="button"
                   onClick={() => handleDemoAccountSelect('TEAM_LEAD')}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[10px] text-slate-700 font-bold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
                 >
                   Team Lead (Arjun)
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDemoAccountSelect('INVENTORY')}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[10px] text-slate-700 font-bold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
                 >
                   Inventory (Priya)
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDemoAccountSelect('EMPLOYEE')}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[10px] text-slate-700 font-bold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
                 >
                   Employee (Suresh)
                 </button>
@@ -471,31 +464,27 @@ export const AuthPortal = () => {
                 <button
                   type="button"
                   onClick={() => handleDemoAccountSelect('COORDINATOR')}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[10px] text-slate-700 font-bold truncate text-center cursor-pointer transition-all hover:border-teal-400"
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-teal-400"
                 >
                   Coordinator (Vikram)
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDemoAccountSelect('CEO')}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[10px] text-slate-700 font-bold truncate text-center cursor-pointer transition-all hover:border-teal-400"
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-teal-400"
                 >
                   CEO / Founder (Rajesh)
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDemoAccountSelect('HR')}
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[10px] text-slate-700 font-bold truncate text-center cursor-pointer transition-all hover:border-teal-400"
+                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-teal-400"
                 >
                   HR Manager (Ananya)
                 </button>
               </>
             )}
           </div>
-        </div>
-
-        <div className="text-center text-[10px] text-slate-500 font-medium">
-          MRA Enterprise Security • Strict Role Access Enforced
         </div>
       </div>
     </div>

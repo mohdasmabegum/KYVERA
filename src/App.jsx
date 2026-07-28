@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { useApp } from './context/AppContext';
-import { SplashScreen } from './components/SplashScreen';
 import { AuthPortal } from './components/AuthPortal';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -12,20 +11,9 @@ import { LeaveModule } from './components/LeaveModule';
 import { MaterialModule } from './components/MaterialModule';
 import { WorkTransferModule } from './components/WorkTransferModule';
 import { ActivityLogsModule } from './components/ActivityLogsModule';
-import { SelfHostModule } from './components/SelfHostModule';
 
 export function App() {
   const { isAuthenticated, activeTab } = useApp();
-  const [showSplash, setShowSplash] = useState(true);
-
-  const handleSplashFinish = useCallback(() => {
-    setShowSplash(false);
-  }, []);
-
-  // Render 3-second Splash Screen on initial load
-  if (showSplash) {
-    return <SplashScreen onFinish={handleSplashFinish} />;
-  }
 
   // If not authenticated, render AuthPortal (Sign In / Register)
   if (!isAuthenticated) {
@@ -44,15 +32,13 @@ export function App() {
         return <WorkTransferModule />;
       case 'logs':
         return <ActivityLogsModule />;
-      case 'selfhost':
-        return <SelfHostModule />;
       default:
         return <AdminDashboard />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-kyvera-dark text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
       {/* Top Header */}
       <Header />
 
@@ -62,7 +48,7 @@ export function App() {
         <Sidebar />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
           {renderTabContent()}
         </main>
       </div>
