@@ -22,12 +22,12 @@ const INITIAL_DEPARTMENTS = [
 ];
 
 const INITIAL_EMPLOYEES = [
-  { id: 'MRA-001', name: 'Dr. Rajesh Varma', role: 'CEO', dept: 'Executive', email: 'rajesh@mra.kyvera.com', leaveBalance: { EL: 12, CL: 8 }, onLeave: false },
-  { id: 'MRA-002', name: 'Ananya Sharma', role: 'HR', dept: 'Human Resources', email: 'ananya@mra.kyvera.com', leaveBalance: { EL: 14, CL: 6 }, onLeave: false },
-  { id: 'MRA-003', name: 'Vikram Seth', role: 'COORDINATOR', dept: 'Operations', email: 'vikram@mra.kyvera.com', leaveBalance: { EL: 10, CL: 10 }, onLeave: false },
-  { id: 'MRA-004', name: 'Arjun Mehta', role: 'TEAM_LEAD', dept: 'Engineering', email: 'arjun@mra.kyvera.com', leaveBalance: { EL: 15, CL: 5 }, onLeave: false },
+  { id: 'MRA-001', name: 'Dr. Rajesh Varma', role: 'CEO', dept: 'Executive', email: 'ceo@mra.kyvera.com', leaveBalance: { EL: 12, CL: 8 }, onLeave: false },
+  { id: 'MRA-002', name: 'Ananya Sharma', role: 'HR', dept: 'Human Resources', email: 'hr@mra.kyvera.com', leaveBalance: { EL: 14, CL: 6 }, onLeave: false },
+  { id: 'MRA-003', name: 'Vikram Seth', role: 'COORDINATOR', dept: 'Operations', email: 'coordinator@mra.kyvera.com', leaveBalance: { EL: 10, CL: 10 }, onLeave: false },
+  { id: 'MRA-004', name: 'Arjun Mehta', role: 'TEAM_LEAD', dept: 'Engineering', email: 'tl@mra.kyvera.com', leaveBalance: { EL: 15, CL: 5 }, onLeave: false },
   { id: 'MRA-005', name: 'Suresh Kumar', role: 'EMPLOYEE', dept: 'Engineering', email: 'suresh@mra.kyvera.com', leaveBalance: { EL: 11, CL: 7 }, onLeave: false },
-  { id: 'MRA-006', name: 'Priya Nair', role: 'INVENTORY', dept: 'Supply Chain', email: 'priya@mra.kyvera.com', leaveBalance: { EL: 13, CL: 9 }, onLeave: false }
+  { id: 'MRA-006', name: 'Priya Nair', role: 'INVENTORY', dept: 'Supply Chain', email: 'inventory@mra.kyvera.com', leaveBalance: { EL: 13, CL: 9 }, onLeave: false }
 ];
 
 const INITIAL_INVENTORY = [
@@ -240,7 +240,7 @@ export const AppProvider = ({ children }) => {
 
   const [departments] = useState(INITIAL_DEPARTMENTS);
 
-  // Active view tab state (scoped to default page based on role)
+  // Default page per role
   const getDefaultTabForRole = (roleKey) => {
     if (roleKey === 'HR') return 'leave';
     if (roleKey === 'INVENTORY') return 'material';
@@ -251,14 +251,53 @@ export const AppProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [notificationCount, setNotificationCount] = useState(2);
 
-  // Login handler
-  const loginAsRole = (roleKey) => {
-    if (ROLES[roleKey]) {
-      setCurrentRoleKey(roleKey);
-      setCurrentUser(ROLES[roleKey]);
-      setIsAuthenticated(true);
-      setActiveTab(getDefaultTabForRole(roleKey));
-    }
+  // Dynamic Login Handler
+  const loginAsUser = (email, roleKey) => {
+    const foundEmp = employees.find(e => e.email.toLowerCase() === email.toLowerCase());
+    const targetRole = roleKey || (foundEmp ? foundEmp.role : 'EMPLOYEE');
+
+    const userObj = {
+      id: targetRole,
+      title: ROLES[targetRole]?.title || 'Employee Account',
+      name: foundEmp ? foundEmp.name : (ROLES[targetRole]?.name || 'User Account'),
+      empId: foundEmp ? foundEmp.id : (ROLES[targetRole]?.empId || 'MRA-000'),
+      dept: foundEmp ? foundEmp.dept : (ROLES[targetRole]?.dept || 'Operations')
+    };
+
+    setCurrentRoleKey(targetRole);
+    setCurrentUser(userObj);
+    setIsAuthenticated(true);
+    setActiveTab(getDefaultTabForRole(targetRole));
+    return true;
+  };
+
+  // Register New User Handler
+  const registerUser = (userData) => {
+    const newEmp = {
+      id: userData.empId || `MRA-${Date.now().toString().slice(-4)}`,
+      name: userData.name,
+      role: userData.role,
+      dept: userData.dept,
+      email: userData.email,
+      leaveBalance: { EL: 12, CL: 8 },
+      onLeave: false
+    };
+
+    setEmployees(prev => [newEmp, ...prev]);
+
+    const userObj = {
+      id: userData.role,
+      title: userData.title || 'User Account',
+      name: userData.name,
+      empId: newEmp.id,
+      dept: userData.dept
+    };
+
+    setCurrentRoleKey(userData.role);
+    setCurrentUser(userObj);
+    setIsAuthenticated(true);
+    setActiveTab(getDefaultTabForRole(userData.role));
+    return newEmp;
   };
 
   const logout = () => {
@@ -401,7 +440,7 @@ export const AppProvider = ({ children }) => {
         if (status === 'Completed') {
           updated.completedDate = new Date().toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' });
           updated.progress = 100;
-          updated.completionDays = 2; // Default completion duration calculation
+          updated.completionDays = 2;
         }
         addLog('WORK', `Work Status: ${status}`, item.assignedEmpName, item.toDept, currentUser.name, status, `Work task ${item.id} (${item.projectName}) set to ${status}.`);
         return updated;
@@ -440,7 +479,8 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider value={{
       isAuthenticated,
-      loginAsRole,
+      loginAsUser,
+      registerUser,
       logout,
       currentUser,
       currentRoleKey,

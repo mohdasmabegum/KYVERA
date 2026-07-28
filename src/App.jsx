@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from './context/AppContext';
 import { SplashScreen } from './components/SplashScreen';
-import { LoginPage } from './components/LoginPage';
+import { AuthPortal } from './components/AuthPortal';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
@@ -23,9 +23,9 @@ export function App() {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
 
-  // If not authenticated, render LoginPage
+  // If not authenticated, render AuthPortal (Sign In / Register)
   if (!isAuthenticated) {
-    return <LoginPage />;
+    return <AuthPortal />;
   }
 
   const renderTabContent = () => {
