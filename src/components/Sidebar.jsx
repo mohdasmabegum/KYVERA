@@ -6,13 +6,15 @@ import {
   Package, 
   ArrowLeftRight, 
   FileText, 
-  ShieldCheck 
+  ShieldCheck,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
-export const Sidebar = () => {
+export const Sidebar = ({ isOpen, setIsOpen }) => {
   const { activeTab, setActiveTab, currentUser } = useApp();
 
-  const role = currentUser.id;
+  const role = currentUser?.id;
 
   const allTabs = [
     { id: 'dashboard', name: 'Executive Overview', icon: LayoutDashboard, roles: ['CEO', 'COORDINATOR', 'TEAM_LEAD'] },
@@ -24,24 +26,34 @@ export const Sidebar = () => {
 
   const visibleTabs = allTabs.filter(tab => tab.roles.includes(role));
 
+  if (!isOpen) return null;
+
   return (
-    <aside className="w-72 bg-white border-r border-slate-200 p-6 flex flex-col justify-between hidden lg:flex min-h-[calc(100vh-80px)] shrink-0">
+    <aside className="w-72 bg-white border-r border-slate-200 p-6 flex flex-col justify-between hidden lg:flex min-h-[calc(100vh-80px)] shrink-0 transition-all duration-300">
       <div className="space-y-6">
-        {/* Role Scoped Badge */}
+        {/* Sidebar Header & Toggle */}
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+          <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Navigation Menu</span>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
+            title="Collapse Sidebar"
+          >
+            <ChevronLeft size={18} />
+          </button>
+        </div>
+
+        {/* Role Scoped Badge Card */}
         <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs space-y-1">
           <div className="text-xs font-extrabold uppercase tracking-wider text-cyan-800 flex items-center gap-2">
             <ShieldCheck size={16} /> Active Persona
           </div>
-          <div className="font-extrabold text-base text-slate-900 leading-tight pt-1">{currentUser.title}</div>
-          <div className="text-xs text-slate-600 font-bold">{currentUser.dept} Department</div>
+          <div className="font-extrabold text-base text-slate-900 leading-tight pt-1">{currentUser?.title}</div>
+          <div className="text-xs text-slate-600 font-bold">{currentUser?.dept} Department</div>
         </div>
 
-        {/* Navigation Menu */}
+        {/* Navigation Menu Buttons */}
         <div className="space-y-2">
-          <div className="px-3 pb-2 text-xs font-extrabold uppercase tracking-wider text-slate-400">
-            Navigation Menu
-          </div>
-
           {visibleTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

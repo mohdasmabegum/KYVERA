@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { DetailView } from './components/DetailView';
+import { Footer } from './components/Footer';
 
 // Modules
 import { AdminDashboard } from './components/Dashboards/AdminDashboard';
@@ -17,7 +18,8 @@ import { ActivityLogsModule } from './components/ActivityLogsModule';
 export function App() {
   const { isAuthenticated, activeTab } = useApp();
   const [showSplash, setShowSplash] = useState(true);
-  const [activeDetail, setActiveDetail] = useState(null); // { item, type }
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeDetail, setActiveDetail] = useState(null);
 
   const handleSplashFinish = useCallback(() => {
     setShowSplash(false);
@@ -41,7 +43,7 @@ export function App() {
     return <AuthPortal />;
   }
 
-  // 3. Render Detail View if selected
+  // 3. Render authenticated Dashboard Content
   const renderTabContent = () => {
     if (activeDetail) {
       return (
@@ -72,18 +74,21 @@ export function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col w-full">
       {/* Top Header */}
-      <Header />
+      <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      {/* Main Full Width Layout Area */}
+      {/* Main Full Width Layout Area with Collapsible Sidebar */}
       <div className="flex-1 flex w-full pb-16 lg:pb-6">
-        {/* Desktop Sidebar */}
-        <Sidebar />
+        {/* Collapsible Sidebar */}
+        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-        {/* Dynamic Page Content (Full Screen Width Expansion) */}
-        <main className="flex-1 p-6 lg:p-10 overflow-y-auto w-full">
+        {/* Dynamic Page Content (Maintains distance from edges) */}
+        <main className="flex-1 p-6 sm:p-8 lg:p-10 overflow-y-auto w-full">
           {renderTabContent()}
         </main>
       </div>
+
+      {/* Official Footer with Copyright */}
+      <Footer />
 
       {/* Mobile Bottom Navigation Bar */}
       <MobileNav />

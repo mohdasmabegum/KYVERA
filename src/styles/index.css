@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* KYVERA Professional Enterprise Light Design System */
+/* KYVERA Enterprise Design System */
 :root {
   --primary-navy: #0f172a;
   --primary-cyan: #0284c7;
@@ -27,7 +27,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar */
+/* Scrollbars */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -41,6 +41,15 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Card Hover Animations & Separate Cards */
+.card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.08);
 }
 
 /* Input Fields */
@@ -62,7 +71,7 @@ body {
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
-/* Primary Button */
+/* Buttons */
 .kyvera-btn-primary {
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: #ffffff;
