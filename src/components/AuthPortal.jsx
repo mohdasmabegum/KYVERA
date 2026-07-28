@@ -137,7 +137,7 @@ export const AuthPortal = () => {
         <div className="flex flex-col items-center text-center space-y-2">
           <OrbitLogo size="lg" showText={true} />
           <p className="text-xs text-slate-400">
-            Enterprise Portal • <span className="text-cyan-400 font-bold">https://MRA.KYVERA.git</span>
+            Enterprise Single Sign-On Portal • <span className="text-cyan-400 font-bold">KYVERA by MRA</span>
           </p>
         </div>
 

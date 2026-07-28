@@ -15,12 +15,17 @@ export const Header = () => {
           <OrbitLogo size="sm" showText={true} />
         </div>
 
-        {/* Center Domain Pill */}
+        {/* Center Domain Pill with Valid Live URL */}
         <div className="hidden md:flex items-center gap-3 bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-cyan-500/30 text-xs">
           <Globe size={13} className="text-cyan-400 animate-pulse" />
-          <span className="text-slate-400">Enterprise Node:</span>
-          <a href="https://MRA.KYVERA.git" className="font-extrabold text-cyan-300 hover:underline">
-            https://MRA.KYVERA.git
+          <span className="text-slate-400">Live Enterprise URL:</span>
+          <a 
+            href="https://mohdasmabegum.github.io/KYVERA/" 
+            target="_blank" 
+            rel="noreferrer" 
+            className="font-extrabold text-cyan-300 hover:underline flex items-center gap-1"
+          >
+            mohdasmabegum.github.io/KYVERA/
           </a>
           <span className="text-slate-600">|</span>
           <span className="text-emerald-400 font-semibold flex items-center gap-1">

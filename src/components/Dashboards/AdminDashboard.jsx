@@ -53,7 +53,7 @@ export const AdminDashboard = () => {
       <div className="p-6 rounded-2xl glass-panel border border-cyan-500/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <Building2 size={16} /> Enterprise Operations Center • https://MRA.KYVERA.git
+            <Building2 size={16} /> Enterprise Operations Center • KYVERA BY MRA
           </div>
           <h1 className="text-2xl font-extrabold text-white mt-1">Executive & Workload Analytics</h1>
           <p className="text-xs text-slate-400 mt-0.5">
