@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from './context/AppContext';
+import { SplashScreen } from './components/SplashScreen';
 import { LoginPage } from './components/LoginPage';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
@@ -15,6 +16,12 @@ import { SelfHostModule } from './components/SelfHostModule';
 
 export function App() {
   const { isAuthenticated, activeTab } = useApp();
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Render 3-second Splash Screen on initial load
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
 
   // If not authenticated, render LoginPage
   if (!isAuthenticated) {
