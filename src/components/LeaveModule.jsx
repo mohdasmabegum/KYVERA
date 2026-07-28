@@ -16,21 +16,25 @@ import {
 import confetti from 'canvas-confetti';
 
 export const LeaveModule = ({ onInspectDetail }) => {
-  const { currentUser, leaveRequests, applyLeave, updateLeaveStatus, exportToExcel } = useApp();
+  const { currentUser, leaveRequests, applyLeave, updateLeaveStatus, exportToExcel, departments } = useApp();
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('ALL');
 
-  // Form State
+  // Exact Form State Fields requested by user:
+  // 1. Name, 2. Id, 3. Date, 4. Purpose, 5. Type of leave(EL/CL), 6. Requirement(Emergency/Important/General), 7. Dept
   const [formData, setFormData] = useState({
+    name: currentUser?.name || '',
+    empId: currentUser?.empId || '',
     fromDate: '',
     toDate: '',
+    purpose: '',
     leaveType: 'EL',
     priority: 'General',
-    purpose: '',
-    contactNumber: currentUser.contactNumber || '+91 98765 00000'
+    dept: currentUser?.dept || 'Engineering',
+    contactNumber: '+91 98765 00000'
   });
 
-  const isHR = currentUser.id === 'HR' || currentUser.id === 'CEO';
+  const isHR = currentUser?.id === 'HR' || currentUser?.id === 'CEO';
 
   const calculateDays = (from, to) => {
     if (!from || !to) return 1;
@@ -57,18 +61,6 @@ export const LeaveModule = ({ onInspectDetail }) => {
     return req.status === statusFilter;
   });
 
-  const getPriorityBadge = (priority) => {
-    if (priority === 'Emergency') return 'badge-emergency';
-    if (priority === 'Important') return 'badge-important';
-    return 'badge-general';
-  };
-
-  const getStatusBadge = (status) => {
-    if (status === 'Approved') return 'badge-success';
-    if (status === 'Rejected') return 'badge-emergency';
-    return 'badge-pending';
-  };
-
   return (
     <div className="space-y-8 w-full">
       {/* Header Banner */}
@@ -77,25 +69,25 @@ export const LeaveModule = ({ onInspectDetail }) => {
           <div className="flex items-center gap-2 text-xs font-extrabold text-cyan-700 uppercase tracking-widest">
             <Calendar size={18} /> Enterprise Leave Portal
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-1">Leave Management</h1>
+          <h1 className="text-3xl font-extrabold text-slate-900 mt-1">Leave Application Portal</h1>
           <p className="text-sm text-slate-500 font-semibold mt-0.5">
-            Submit leave requests, monitor department availability, and perform HR approvals.
+            Submit leave applications, track HR approvals, and view database logs.
           </p>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
           <button
-            onClick={() => exportToExcel(leaveRequests, `Kyvera_Leave_Report_${Date.now()}.csv`)}
+            onClick={() => exportToExcel(leaveRequests, `Kyvera_Leave_Database_Sheet_${Date.now()}.csv`)}
             className="kyvera-btn-secondary py-3 px-5 text-sm font-extrabold"
           >
-            <FileSpreadsheet size={18} className="text-emerald-600" /> Export Report
+            <FileSpreadsheet size={18} className="text-emerald-600" /> Export Database Sheet CSV
           </button>
           
           <button
             onClick={() => setIsApplyModalOpen(true)}
             className="kyvera-btn-primary py-3 px-6 text-sm font-extrabold shadow-md"
           >
-            <Plus size={18} /> Apply Leave
+            <Plus size={18} /> Apply Leave Request
           </button>
         </div>
       </div>
@@ -105,7 +97,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
         <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
           <div className="text-xs font-extrabold text-slate-500">Total Applications</div>
           <div className="text-3xl font-extrabold text-slate-900 mt-1">{leaveRequests.length}</div>
-          <div className="text-xs text-slate-500 font-semibold mt-1">Across all departments</div>
+          <div className="text-xs text-slate-500 font-semibold mt-1">Stored in Database Log</div>
         </div>
         <div className="p-5 rounded-2xl bg-white border border-slate-200 border-l-4 border-l-amber-500 shadow-sm">
           <div className="text-xs font-extrabold text-slate-500">Pending Review</div>
@@ -119,7 +111,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
           <div className="text-3xl font-extrabold text-emerald-700 mt-1">
             {leaveRequests.filter(l => l.status === 'Approved').length}
           </div>
-          <div className="text-xs text-emerald-800 font-bold mt-1">Granted by HR</div>
+          <div className="text-xs text-emerald-800 font-bold mt-1">Granted & Verified</div>
         </div>
         <div className="p-5 rounded-2xl bg-white border border-slate-200 border-l-4 border-l-rose-500 shadow-sm">
           <div className="text-xs font-extrabold text-slate-500">Rejected</div>
@@ -130,12 +122,12 @@ export const LeaveModule = ({ onInspectDetail }) => {
         </div>
       </div>
 
-      {/* Request Filter & Data List */}
+      {/* Leave Database Log List */}
       <div className="rounded-3xl bg-white p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-slate-200">
           <div className="flex items-center gap-2">
             <Filter size={18} className="text-cyan-700" />
-            <span className="text-sm font-extrabold text-slate-900 uppercase tracking-wider">Leave Applications</span>
+            <span className="text-sm font-extrabold text-slate-900 uppercase tracking-wider">Leave Applications Sheet Log</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -158,7 +150,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
         <div className="space-y-4">
           {filteredRequests.length === 0 ? (
             <div className="text-center py-10 text-slate-500 text-sm font-bold">
-              No leave records found matching current criteria.
+              No leave records found in database. Apply for leave to see database log entry.
             </div>
           ) : (
             filteredRequests.map((req) => (
@@ -166,13 +158,15 @@ export const LeaveModule = ({ onInspectDetail }) => {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-2 flex-1">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <span className="font-extrabold text-base text-slate-900">{req.empName}</span>
-                      <span className="text-xs font-bold text-slate-500">({req.empId})</span>
+                      <span className="font-extrabold text-base text-slate-900">{req.name}</span>
+                      <span className="text-xs font-bold text-slate-500">(ID: {req.empId})</span>
                       <span className="px-3 py-1 rounded-md bg-white text-xs text-slate-700 border border-slate-200 font-bold">
-                        {req.dept}
+                        Dept: {req.dept}
                       </span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-extrabold ${getPriorityBadge(req.priority)}`}>
-                        {req.priority}
+                      <span className={`px-3 py-1 rounded-full text-xs font-extrabold ${
+                        req.priority === 'Emergency' ? 'badge-emergency' : req.priority === 'Important' ? 'badge-important' : 'badge-general'
+                      }`}>
+                        Req: {req.priority}
                       </span>
                       <span className="px-3 py-1 rounded-md bg-cyan-50 text-cyan-900 border border-cyan-200 text-xs font-extrabold">
                         Type: {req.leaveType} ({req.leaveDays} Days)
@@ -185,19 +179,21 @@ export const LeaveModule = ({ onInspectDetail }) => {
 
                     <div className="flex items-center gap-5 text-xs text-slate-600 font-bold flex-wrap">
                       <span className="flex items-center gap-1.5">
-                        <Calendar size={14} className="text-cyan-700" /> {req.fromDate} to {req.toDate}
+                        <Calendar size={14} className="text-cyan-700" /> Date: {req.fromDate} to {req.toDate}
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <Phone size={14} className="text-emerald-700" /> {req.contactNumber}
+                        <Phone size={14} className="text-emerald-700" /> Emergency Contact: {req.contact}
                       </span>
                       <span className="flex items-center gap-1.5 text-slate-400 font-semibold">
-                        <Clock size={14} /> Applied: {req.appliedDate}
+                        <Clock size={14} /> Applied Date: {req.appliedDate}
                       </span>
                     </div>
                   </div>
 
                   <div className="flex flex-col md:items-end gap-3">
-                    <span className={`px-4 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1.5 w-fit ${getStatusBadge(req.status)}`}>
+                    <span className={`px-4 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1.5 w-fit ${
+                      req.status === 'Approved' ? 'badge-success' : req.status === 'Rejected' ? 'badge-emergency' : 'badge-pending'
+                    }`}>
                       {req.status === 'Approved' && <CheckCircle2 size={16} />}
                       {req.status === 'Rejected' && <XCircle size={16} />}
                       {req.status === 'Pending' && <Clock size={16} />}
@@ -208,7 +204,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
                       onClick={() => onInspectDetail && onInspectDetail(req, 'leave')}
                       className="kyvera-btn-secondary py-2 px-4 text-xs font-extrabold flex items-center gap-1.5 cursor-pointer"
                     >
-                      Inspect Full Details Page <ArrowRight size={14} />
+                      Inspect Detailed Log Page <ArrowRight size={14} />
                     </button>
 
                     {isHR && req.status === 'Pending' && (
@@ -238,26 +234,40 @@ export const LeaveModule = ({ onInspectDetail }) => {
         </div>
       </div>
 
-      {/* Apply Leave Modal */}
+      {/* Apply Leave Modal with Exact Form Fields Requested */}
       <Modal
         isOpen={isApplyModalOpen}
         onClose={() => setIsApplyModalOpen(false)}
-        title="Submit New Leave Request"
+        title="Submit Leave Application"
         icon={Calendar}
       >
         <form onSubmit={handleFormSubmit} className="space-y-4">
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold space-y-1">
-            <div className="text-slate-900 text-sm flex items-center gap-2">
-              <User size={16} className="text-cyan-700" /> Applicant: {currentUser.name} ({currentUser.empId})
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">1. Employee Name *</label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="kyvera-input font-bold"
+              />
             </div>
-            <div className="text-slate-600 font-semibold">
-              Department: {currentUser.dept}
+            <div>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">2. Employee ID *</label>
+              <input
+                type="text"
+                required
+                value={formData.empId}
+                onChange={(e) => setFormData({ ...formData, empId: e.target.value })}
+                className="kyvera-input font-bold"
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">From Date *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">3. From Date *</label>
               <input
                 type="date"
                 required
@@ -267,7 +277,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
               />
             </div>
             <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">To Date *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">3. To Date *</label>
               <input
                 type="date"
                 required
@@ -278,9 +288,21 @@ export const LeaveModule = ({ onInspectDetail }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-extrabold text-slate-800 mb-1.5">4. Purpose of Leave *</label>
+            <textarea
+              required
+              rows={3}
+              placeholder="State purpose of leave..."
+              value={formData.purpose}
+              onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
+              className="kyvera-input resize-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Leave Type *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">5. Type of Leave *</label>
               <select
                 value={formData.leaveType}
                 onChange={(e) => setFormData({ ...formData, leaveType: e.target.value })}
@@ -290,16 +312,28 @@ export const LeaveModule = ({ onInspectDetail }) => {
                 <option value="CL">CL (Casual Leave)</option>
               </select>
             </div>
+
             <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Priority *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">6. Requirement *</label>
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                 className="kyvera-input font-bold"
               >
-                <option value="General">General</option>
-                <option value="Important">Important</option>
                 <option value="Emergency">Emergency</option>
+                <option value="Important">Important</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">7. Department *</label>
+              <select
+                value={formData.dept}
+                onChange={(e) => setFormData({ ...formData, dept: e.target.value })}
+                className="kyvera-input font-bold"
+              >
+                {departments.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
           </div>
@@ -312,19 +346,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
               placeholder="+91 98765 43210"
               value={formData.contactNumber}
               onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
-              className="kyvera-input"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Purpose of Leave *</label>
-            <textarea
-              required
-              rows={3}
-              placeholder="State the reason for leave application..."
-              value={formData.purpose}
-              onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-              className="kyvera-input resize-none"
+              className="kyvera-input font-bold"
             />
           </div>
 
@@ -340,7 +362,7 @@ export const LeaveModule = ({ onInspectDetail }) => {
               type="submit"
               className="kyvera-btn-primary text-xs"
             >
-              Submit Application
+              Submit Application to Database
             </button>
           </div>
         </form>
