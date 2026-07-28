@@ -30,20 +30,20 @@ export const Sidebar = () => {
   const visibleTabs = allTabs.filter(tab => tab.roles.includes(role));
 
   return (
-    <aside className="w-64 glass-panel border-r border-slate-800 p-4 flex flex-col justify-between hidden lg:flex min-h-[calc(100vh-65px)]">
+    <aside className="w-64 bg-white border-r border-slate-200 p-4 flex flex-col justify-between hidden lg:flex min-h-[calc(100vh-65px)]">
       <div className="space-y-6">
         {/* Role Scoped Badge */}
-        <div className="p-3.5 rounded-2xl bg-gradient-to-r from-slate-900 to-cyan-950/60 border border-cyan-500/20">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-            <ShieldCheck size={13} /> Logged In Persona
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-cyan-50 border border-slate-200">
+          <div className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-700 flex items-center gap-1.5">
+            <ShieldCheck size={13} /> Active Persona
           </div>
-          <div className="font-extrabold text-sm text-white mt-0.5">{currentUser.title}</div>
-          <div className="text-[11px] text-slate-400">{currentUser.dept} Department</div>
+          <div className="font-extrabold text-sm text-slate-900 mt-0.5">{currentUser.title}</div>
+          <div className="text-[11px] text-slate-500 font-medium">{currentUser.dept} Department</div>
         </div>
 
         {/* Navigation Menu */}
         <div className="space-y-1">
-          <div className="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+          <div className="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
             Navigation Menu
           </div>
 
@@ -56,11 +56,11 @@ export const Sidebar = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg shadow-cyan-500/20'
-                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
+                    ? 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md shadow-cyan-600/20'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
-                <Icon size={17} className={isActive ? 'text-white' : 'text-slate-400'} />
+                <Icon size={17} className={isActive ? 'text-white' : 'text-slate-500'} />
                 <span>{tab.name}</span>
               </button>
             );
@@ -69,13 +69,13 @@ export const Sidebar = () => {
       </div>
 
       {/* Footer Branding */}
-      <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[10px] text-slate-500 text-center space-y-1">
-        <div className="font-bold text-slate-300">KYVERA by MRA Enterprise</div>
+      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-[10px] text-slate-500 text-center space-y-1">
+        <div className="font-extrabold text-slate-700">KYVERA by MRA Enterprise</div>
         <a 
           href="https://mohdasmabegum.github.io/KYVERA/" 
           target="_blank" 
           rel="noreferrer" 
-          className="text-cyan-400 font-bold hover:underline block truncate"
+          className="text-cyan-700 font-bold hover:underline block truncate"
         >
           mohdasmabegum.github.io/KYVERA/
         </a>

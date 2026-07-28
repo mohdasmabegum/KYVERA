@@ -7,12 +7,9 @@ import {
   CheckCircle2, 
   XCircle, 
   Clock, 
-  Download, 
   Filter, 
   Phone, 
-  AlertTriangle,
   User,
-  Building,
   FileSpreadsheet
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -33,9 +30,7 @@ export const LeaveModule = () => {
   });
 
   const isHR = currentUser.id === 'HR' || currentUser.id === 'CEO';
-  const isTL = currentUser.id === 'TEAM_LEAD' || currentUser.id === 'COORDINATOR';
 
-  // Calculate days difference
   const calculateDays = (from, to) => {
     if (!from || !to) return 1;
     const start = new Date(from);
@@ -76,13 +71,13 @@ export const LeaveModule = () => {
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl glass-panel border border-cyan-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-bold text-cyan-700 uppercase tracking-wider">
             <Calendar size={16} /> Enterprise Leave Portal
           </div>
-          <h1 className="text-xl font-extrabold text-white mt-1">Leave Management</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h1 className="text-xl font-extrabold text-slate-900 mt-1">Leave Management</h1>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">
             Submit leave requests, monitor department availability, and perform HR approvals.
           </p>
         </div>
@@ -93,7 +88,7 @@ export const LeaveModule = () => {
             className="kyvera-btn-secondary text-xs"
             title="Export to CSV/Excel"
           >
-            <FileSpreadsheet size={15} className="text-emerald-400" /> Export Report
+            <FileSpreadsheet size={15} className="text-emerald-600" /> Export Report
           </button>
           
           <button
@@ -107,40 +102,40 @@ export const LeaveModule = () => {
 
       {/* Stats Quick Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl glass-card">
-          <div className="text-[11px] font-semibold text-slate-400">Total Applications</div>
-          <div className="text-2xl font-extrabold text-white mt-1">{leaveRequests.length}</div>
-          <div className="text-[10px] text-slate-400 mt-1">Across all departments</div>
+        <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <div className="text-[11px] font-bold text-slate-500">Total Applications</div>
+          <div className="text-2xl font-extrabold text-slate-900 mt-1">{leaveRequests.length}</div>
+          <div className="text-[10px] text-slate-500 font-medium mt-1">Across all departments</div>
         </div>
-        <div className="p-4 rounded-xl glass-card border-l-4 border-l-amber-500">
-          <div className="text-[11px] font-semibold text-slate-400">Pending Review</div>
-          <div className="text-2xl font-extrabold text-amber-400 mt-1">
+        <div className="p-4 rounded-xl bg-white border border-slate-200 border-l-4 border-l-amber-500 shadow-xs">
+          <div className="text-[11px] font-bold text-slate-500">Pending Review</div>
+          <div className="text-2xl font-extrabold text-amber-700 mt-1">
             {leaveRequests.filter(l => l.status === 'Pending').length}
           </div>
-          <div className="text-[10px] text-amber-400/80 mt-1">Awaiting HR Decision</div>
+          <div className="text-[10px] text-amber-800 font-semibold mt-1">Awaiting HR Decision</div>
         </div>
-        <div className="p-4 rounded-xl glass-card border-l-4 border-l-emerald-500">
-          <div className="text-[11px] font-semibold text-slate-400">Approved Leaves</div>
-          <div className="text-2xl font-extrabold text-emerald-400 mt-1">
+        <div className="p-4 rounded-xl bg-white border border-slate-200 border-l-4 border-l-emerald-500 shadow-xs">
+          <div className="text-[11px] font-bold text-slate-500">Approved Leaves</div>
+          <div className="text-2xl font-extrabold text-emerald-700 mt-1">
             {leaveRequests.filter(l => l.status === 'Approved').length}
           </div>
-          <div className="text-[10px] text-emerald-400/80 mt-1">Granted by HR</div>
+          <div className="text-[10px] text-emerald-800 font-semibold mt-1">Granted by HR</div>
         </div>
-        <div className="p-4 rounded-xl glass-card border-l-4 border-l-rose-500">
-          <div className="text-[11px] font-semibold text-slate-400">Rejected</div>
-          <div className="text-2xl font-extrabold text-rose-400 mt-1">
+        <div className="p-4 rounded-xl bg-white border border-slate-200 border-l-4 border-l-rose-500 shadow-xs">
+          <div className="text-[11px] font-bold text-slate-500">Rejected</div>
+          <div className="text-2xl font-extrabold text-rose-700 mt-1">
             {leaveRequests.filter(l => l.status === 'Rejected').length}
           </div>
-          <div className="text-[10px] text-rose-400/80 mt-1">Closed Applications</div>
+          <div className="text-[10px] text-rose-800 font-semibold mt-1">Closed Applications</div>
         </div>
       </div>
 
       {/* Request Filter & Data List */}
-      <div className="rounded-2xl glass-panel p-5 border border-slate-800 space-y-4">
-        <div className="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-slate-800">
+      <div className="rounded-2xl bg-white p-5 border border-slate-200 shadow-sm space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-slate-200">
           <div className="flex items-center gap-2">
-            <Filter size={16} className="text-cyan-400" />
-            <span className="text-xs font-bold text-white uppercase tracking-wider">Leave Applications</span>
+            <Filter size={16} className="text-cyan-700" />
+            <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Leave Applications</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -148,10 +143,10 @@ export const LeaveModule = () => {
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   statusFilter === status
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold'
-                    : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                    ? 'bg-cyan-100 text-cyan-900 border border-cyan-300 font-extrabold'
+                    : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
                 }`}
               >
                 {status}
@@ -162,49 +157,49 @@ export const LeaveModule = () => {
 
         <div className="space-y-3">
           {filteredRequests.length === 0 ? (
-            <div className="text-center py-10 text-slate-400 text-xs">
+            <div className="text-center py-10 text-slate-500 text-xs font-medium">
               No leave records found matching current criteria.
             </div>
           ) : (
             filteredRequests.map((req) => (
-              <div key={req.id} className="p-4 rounded-xl glass-card border border-slate-800/80 hover:border-cyan-500/30">
+              <div key={req.id} className="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-cyan-300 transition-all">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   {/* Left Employee & Details */}
                   <div className="space-y-1.5 flex-1">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-bold text-sm text-white">{req.empName}</span>
-                      <span className="text-[11px] font-semibold text-slate-400">({req.empId})</span>
-                      <span className="px-2 py-0.5 rounded bg-slate-900 text-[10px] text-slate-300 border border-slate-800">
+                      <span className="font-extrabold text-sm text-slate-900">{req.empName}</span>
+                      <span className="text-[11px] font-bold text-slate-500">({req.empId})</span>
+                      <span className="px-2 py-0.5 rounded bg-white text-[10px] text-slate-700 border border-slate-200 font-semibold">
                         {req.dept}
                       </span>
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPriorityBadge(req.priority)}`}>
                         {req.priority}
                       </span>
-                      <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px] font-bold">
+                      <span className="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 text-[10px] font-extrabold">
                         Type: {req.leaveType} ({req.leaveDays} Days)
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-300 font-medium">
-                      <span className="text-slate-400">Purpose:</span> {req.purpose}
+                    <p className="text-xs text-slate-700 font-medium">
+                      <span className="text-slate-500 font-bold">Purpose:</span> {req.purpose}
                     </p>
 
-                    <div className="flex items-center gap-4 text-[11px] text-slate-400 flex-wrap">
+                    <div className="flex items-center gap-4 text-[11px] text-slate-500 font-medium flex-wrap">
                       <span className="flex items-center gap-1">
-                        <Calendar size={12} className="text-cyan-400" /> {req.fromDate} to {req.toDate}
+                        <Calendar size={12} className="text-cyan-600" /> {req.fromDate} to {req.toDate}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Phone size={12} className="text-emerald-400" /> {req.contactNumber}
+                        <Phone size={12} className="text-emerald-600" /> {req.contactNumber}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Clock size={12} className="text-slate-500" /> Applied: {req.appliedDate}
+                      <span className="flex items-center gap-1 text-slate-400">
+                        <Clock size={12} /> Applied: {req.appliedDate}
                       </span>
                     </div>
                   </div>
 
                   {/* Right Status & HR Actions */}
-                  <div className="flex flex-col md:items-end gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-800">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 w-fit ${getStatusBadge(req.status)}`}>
+                  <div className="flex flex-col md:items-end gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
+                    <span className={`px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1.5 w-fit ${getStatusBadge(req.status)}`}>
                       {req.status === 'Approved' && <CheckCircle2 size={14} />}
                       {req.status === 'Rejected' && <XCircle size={14} />}
                       {req.status === 'Pending' && <Clock size={14} className="animate-spin" />}
@@ -212,8 +207,8 @@ export const LeaveModule = () => {
                     </span>
 
                     {req.approvedBy && (
-                      <span className="text-[10px] text-slate-400">
-                        {req.status} by: <span className="text-slate-200 font-medium">{req.approvedBy}</span>
+                      <span className="text-[10px] text-slate-500 font-medium">
+                        {req.status} by: <span className="text-slate-900 font-bold">{req.approvedBy}</span>
                       </span>
                     )}
 
@@ -225,13 +220,13 @@ export const LeaveModule = () => {
                             updateLeaveStatus(req.id, 'Approved', currentUser.name);
                             confetti({ particleCount: 40, spread: 50 });
                           }}
-                          className="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition-all shadow-md"
+                          className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold flex items-center gap-1 cursor-pointer transition-all shadow-xs"
                         >
                           <CheckCircle2 size={13} /> Approve
                         </button>
                         <button
                           onClick={() => updateLeaveStatus(req.id, 'Rejected', currentUser.name)}
-                          className="px-3 py-1 bg-rose-600/80 hover:bg-rose-600 text-white rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer transition-all"
+                          className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-extrabold flex items-center gap-1 cursor-pointer transition-all shadow-xs"
                         >
                           <XCircle size={13} /> Reject
                         </button>
@@ -253,18 +248,18 @@ export const LeaveModule = () => {
         icon={Calendar}
       >
         <form onSubmit={handleFormSubmit} className="space-y-4">
-          <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
-            <div className="font-bold text-white flex items-center gap-2">
-              <User size={14} className="text-cyan-400" /> Applicant: {currentUser.name} ({currentUser.empId})
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+            <div className="font-bold text-slate-900 flex items-center gap-2">
+              <User size={14} className="text-cyan-700" /> Applicant: {currentUser.name} ({currentUser.empId})
             </div>
-            <div className="text-slate-400">
+            <div className="text-slate-500 font-medium">
               Department: {currentUser.dept}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">From Date *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">From Date *</label>
               <input
                 type="date"
                 required
@@ -274,7 +269,7 @@ export const LeaveModule = () => {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">To Date *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">To Date *</label>
               <input
                 type="date"
                 required
@@ -286,9 +281,9 @@ export const LeaveModule = () => {
           </div>
 
           {formData.fromDate && formData.toDate && (
-            <div className="p-2.5 rounded-lg bg-cyan-950/50 border border-cyan-800 text-xs font-semibold text-cyan-300 flex items-center justify-between">
+            <div className="p-2.5 rounded-lg bg-cyan-50 border border-cyan-200 text-xs font-bold text-cyan-800 flex items-center justify-between">
               <span>Total Duration:</span>
-              <span className="text-sm font-extrabold text-white">
+              <span className="text-sm font-extrabold text-cyan-900">
                 {calculateDays(formData.fromDate, formData.toDate)} Day(s)
               </span>
             </div>
@@ -296,7 +291,7 @@ export const LeaveModule = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Leave Type *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Leave Type *</label>
               <select
                 value={formData.leaveType}
                 onChange={(e) => setFormData({ ...formData, leaveType: e.target.value })}
@@ -307,7 +302,7 @@ export const LeaveModule = () => {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Priority *</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Priority *</label>
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
@@ -321,7 +316,7 @@ export const LeaveModule = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Emergency Contact Number *</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">Emergency Contact Number *</label>
             <input
               type="text"
               required
@@ -333,7 +328,7 @@ export const LeaveModule = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Purpose of Leave *</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">Purpose of Leave *</label>
             <textarea
               required
               rows={3}
@@ -344,7 +339,7 @@ export const LeaveModule = () => {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
             <button
               type="button"
               onClick={() => setIsApplyModalOpen(false)}

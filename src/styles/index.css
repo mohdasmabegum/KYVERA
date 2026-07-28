@@ -2,19 +2,19 @@
 
 @layer base {
   :root {
-    --bg-main: #070e17;
-    --bg-card: #0E1C2E;
-    --bg-card-hover: #15273F;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --primary-cyan: #00B4D8;
-    --primary-teal: #00C49F;
-    --primary-green: #10B981;
-    --primary-navy: #0A192F;
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --border-color: #e2e8f0;
+    --primary-cyan: #0284c7;
+    --primary-teal: #0d9488;
+    --primary-green: #059669;
+    --primary-navy: #0f172a;
   }
 }
 
-.bg-kyvera-dark {
-  background-color: #070E17;
+.bg-kyvera-dark, .bg-kyvera-light {
+  background-color: #f8fafc;
 }
 
 * {
@@ -25,13 +25,13 @@
 }
 
 body {
-  background-color: #070E17;
+  background-color: #f8fafc;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(0, 180, 216, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(10, 25, 47, 0.6) 0px, transparent 100%);
+    radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(13, 148, 136, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(241, 245, 249, 0.8) 0px, transparent 100%);
   background-attachment: fixed;
-  color: #f1f5f9;
+  color: #0f172a;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -43,48 +43,49 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.8);
+  background: #cbd5e1;
   border-radius: 9999px;
   transition: all 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 180, 216, 0.8);
+  background: #0284c7;
 }
 
-/* Glassmorphism & Hover Animations */
+/* Professional Light Glassmorphism & Cards */
 .glass-panel {
-  background: rgba(14, 28, 46, 0.78);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
 .glass-card {
-  background: rgba(15, 30, 50, 0.65);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #ffffff;
+  backdrop-filter: blur(12px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px -2px rgba(15, 23, 42, 0.04);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform, box-shadow, border-color;
 }
 
 .glass-card:hover {
-  background: rgba(22, 44, 75, 0.85);
-  border-color: rgba(0, 180, 216, 0.45);
-  transform: translateY(-3px) scale(1.008);
+  background: #ffffff;
+  border-color: #0284c7;
+  transform: translateY(-2px);
   box-shadow: 
-    0 14px 28px -8px rgba(0, 180, 216, 0.25),
-    0 0 15px 0 rgba(16, 185, 129, 0.15);
+    0 12px 24px -6px rgba(2, 132, 199, 0.12),
+    0 4px 12px -2px rgba(15, 23, 42, 0.04);
 }
 
 /* Kyvera Gradient Text */
 .kyvera-gradient-text {
-  background: linear-gradient(135deg, #38bdf8 0%, #00c49f 50%, #34d399 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 50%, #059669 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -101,98 +102,87 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% {
-    opacity: 0.5;
-    filter: drop-shadow(0 0 12px rgba(0, 180, 216, 0.7));
+    opacity: 0.6;
+    filter: drop-shadow(0 0 10px rgba(2, 132, 199, 0.3));
   }
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 26px rgba(16, 185, 129, 0.9));
+    filter: drop-shadow(0 0 18px rgba(13, 148, 136, 0.4));
   }
 }
 
 .animate-orbit {
-  animation: orbit-spin 22s linear infinite;
+  animation: orbit-spin 24s linear infinite;
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
 }
 
-/* Badges with hover micro-glow */
+/* Clean Professional Light Badges */
 .badge-emergency {
-  background: rgba(244, 63, 94, 0.18);
-  color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.35);
-  transition: all 0.2s ease;
-}
-.badge-emergency:hover {
-  box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+  font-weight: 700;
 }
 
 .badge-important {
-  background: rgba(245, 158, 11, 0.18);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  transition: all 0.2s ease;
-}
-.badge-important:hover {
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+  background: #fffbe6;
+  color: #d97706;
+  border: 1px solid #fef08a;
+  font-weight: 700;
 }
 
 .badge-general {
-  background: rgba(6, 182, 212, 0.18);
-  color: #38bdf8;
-  border: 1px solid rgba(6, 182, 212, 0.35);
-  transition: all 0.2s ease;
-}
-.badge-general:hover {
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+  font-weight: 700;
 }
 
 .badge-success {
-  background: rgba(16, 185, 129, 0.18);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  transition: all 0.2s ease;
-}
-.badge-success:hover {
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-weight: 700;
 }
 
 .badge-pending {
-  background: rgba(234, 179, 8, 0.18);
-  color: #fde047;
-  border: 1px solid rgba(234, 179, 8, 0.35);
+  background: #fefce8;
+  color: #ca8a04;
+  border: 1px solid #fef08a;
+  font-weight: 700;
 }
 
-/* Form Inputs with Smooth Transitions */
+/* Form Inputs with Clean Light Styling */
 .kyvera-input {
   width: 100%;
-  background: rgba(10, 20, 35, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   border-radius: 0.625rem;
   padding: 0.65rem 0.9rem;
-  color: #f8fafc;
+  color: #0f172a;
   font-size: 0.875rem;
   outline: none;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .kyvera-input:hover {
-  border-color: rgba(0, 180, 216, 0.4);
-  background: rgba(14, 26, 44, 0.9);
+  border-color: #0284c7;
+  background: #f8fafc;
 }
 
 .kyvera-input:focus {
-  border-color: #00b4d8;
-  box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.25);
-  background: rgba(16, 30, 52, 0.95);
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  background: #ffffff;
 }
 
-/* Premium Buttons with Hover Ripples & Glows */
+/* Professional Buttons */
 .kyvera-btn-primary {
   position: relative;
-  background: linear-gradient(135deg, #0077b6 0%, #00b4d8 50%, #10b981 100%);
+  background: linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #0d9488 100%);
   color: #ffffff;
   font-weight: 600;
   border-radius: 0.625rem;
@@ -203,27 +193,25 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 4px 16px 0 rgba(0, 180, 216, 0.4);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 14px 0 rgba(2, 132, 199, 0.25);
   overflow: hidden;
 }
 
 .kyvera-btn-primary:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 24px 0 rgba(0, 180, 216, 0.6),
-    0 0 15px 0 rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px 0 rgba(2, 132, 199, 0.35);
 }
 
 .kyvera-btn-primary:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0);
 }
 
 .kyvera-btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
-  font-weight: 500;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-weight: 600;
   border-radius: 0.625rem;
   padding: 0.65rem 1.35rem;
   cursor: pointer;
@@ -231,15 +219,15 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .kyvera-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(0, 180, 216, 0.5);
-  color: #ffffff;
+  background: #f8fafc;
+  border-color: #0284c7;
+  color: #0284c7;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
 .kyvera-btn-secondary:active {
