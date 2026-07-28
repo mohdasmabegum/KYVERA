@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useApp, ROLES } from '../context/AppContext';
+import { useApp } from '../context/AppContext';
 import { OrbitLogo } from './OrbitLogo';
 import { 
   Building2, 
@@ -16,12 +16,11 @@ export const AuthPortal = () => {
   const { loginAsUser, registerUser, departments } = useApp();
 
   const [portalType, setPortalType] = useState('EMPLOYEE');
-  const [authMode, setAuthMode] = useState('LOGIN');
+  const [authMode, setAuthMode] = useState('REGISTER');
 
   // Login form state
-  const [loginEmail, setLoginEmail] = useState('tl@mra.kyvera.com');
-  const [loginPassword, setLoginPassword] = useState('••••••••');
-  const [loginRoleKey, setLoginRoleKey] = useState('TEAM_LEAD');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
   // Employee Registration state
   const [empRegData, setEmpRegData] = useState({
@@ -48,39 +47,13 @@ export const AuthPortal = () => {
   const handlePortalSwitch = (type) => {
     setPortalType(type);
     setMessage('');
-    if (type === 'EMPLOYEE') {
-      setLoginRoleKey('TEAM_LEAD');
-      setLoginEmail('tl@mra.kyvera.com');
-    } else {
-      setLoginRoleKey('CEO');
-      setLoginEmail('ceo@mra.kyvera.com');
-    }
-  };
-
-  const handleDemoAccountSelect = (roleKey) => {
-    const roleMap = {
-      CEO: { email: 'ceo@mra.kyvera.com', portal: 'ORGANIZATION' },
-      COORDINATOR: { email: 'coordinator@mra.kyvera.com', portal: 'ORGANIZATION' },
-      HR: { email: 'hr@mra.kyvera.com', portal: 'ORGANIZATION' },
-      TEAM_LEAD: { email: 'tl@mra.kyvera.com', portal: 'EMPLOYEE' },
-      INVENTORY: { email: 'inventory@mra.kyvera.com', portal: 'EMPLOYEE' },
-      EMPLOYEE: { email: 'suresh@mra.kyvera.com', portal: 'EMPLOYEE' },
-    };
-
-    const target = roleMap[roleKey];
-    if (target) {
-      setPortalType(target.portal);
-      setLoginRoleKey(roleKey);
-      setLoginEmail(target.email);
-      setAuthMode('LOGIN');
-    }
   };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    const success = loginAsUser(loginEmail, loginRoleKey);
-    if (!success) {
-      setMessage('Account not found. Please register a new account below.');
+    const res = loginAsUser(loginEmail, loginPassword);
+    if (!res.success) {
+      setMessage(res.message);
     }
   };
 
@@ -91,23 +64,15 @@ export const AuthPortal = () => {
       return;
     }
 
-    const titles = {
-      TEAM_LEAD: 'Team Lead / Sub-TL',
-      INVENTORY: 'Inventory Manager',
-      EMPLOYEE: 'Normal Employee'
-    };
-
-    const newUser = registerUser({
+    registerUser({
       name: empRegData.name,
       empId: empRegData.empId,
       dept: empRegData.dept,
       role: empRegData.role,
-      email: empRegData.email,
-      title: titles[empRegData.role] || 'Employee Account'
+      email: empRegData.email
     });
 
     confetti({ particleCount: 60, spread: 70 });
-    setMessage(`Employee registration successful! Welcome ${newUser.name}.`);
   };
 
   const handleOrgRegisterSubmit = (e) => {
@@ -117,23 +82,16 @@ export const AuthPortal = () => {
       return;
     }
 
-    const titles = {
-      CEO: 'CEO / Founder / Director',
-      COORDINATOR: 'Project Coordinator',
-      HR: 'HR Manager'
-    };
-
-    const newUser = registerUser({
+    registerUser({
       name: orgRegData.name,
       empId: `MRA-EXEC-${Math.floor(10 + Math.random() * 90)}`,
       dept: orgRegData.role === 'HR' ? 'Human Resources' : 'Executive',
       role: orgRegData.role,
       email: orgRegData.email,
-      title: titles[orgRegData.role] || 'Executive Member'
+      orgName: orgRegData.orgName
     });
 
     confetti({ particleCount: 60, spread: 70 });
-    setMessage(`Organization registration successful! Logged in as ${newUser.title}.`);
   };
 
   return (
@@ -175,29 +133,29 @@ export const AuthPortal = () => {
         <div className="flex items-center justify-center border-b border-slate-200 pb-3">
           <div className="flex items-center gap-6 text-xs font-bold">
             <button
-              onClick={() => { setAuthMode('LOGIN'); setMessage(''); }}
+              onClick={() => { setAuthMode('REGISTER'); setMessage(''); }}
               className={`pb-1 transition-all cursor-pointer ${
-                authMode === 'LOGIN' ? 'text-cyan-700 border-b-2 border-cyan-700 font-extrabold' : 'text-slate-500 hover:text-slate-900'
+                authMode === 'REGISTER' ? 'text-cyan-700 border-b-2 border-cyan-700 font-extrabold' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              Sign In
+              Create Account
             </button>
             <span className="text-slate-300">|</span>
             <button
-              onClick={() => { setAuthMode('REGISTER'); setMessage(''); }}
+              onClick={() => { setAuthMode('LOGIN'); setMessage(''); }}
               className={`pb-1 transition-all cursor-pointer ${
-                authMode === 'REGISTER' ? 'text-teal-700 border-b-2 border-teal-700 font-extrabold' : 'text-slate-500 hover:text-slate-900'
+                authMode === 'LOGIN' ? 'text-teal-700 border-b-2 border-teal-700 font-extrabold' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              Register New Account
+              Sign In Existing Account
             </button>
           </div>
         </div>
 
-        {/* Feedback Message Alert */}
+        {/* Alert Message */}
         {message && (
-          <div className="p-3.5 rounded-xl bg-cyan-50 border border-cyan-200 text-xs text-cyan-900 font-bold flex items-center gap-2">
-            <Sparkles size={16} className="text-cyan-700" />
+          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-bold flex items-center gap-2">
+            <Sparkles size={16} className="text-amber-700" />
             <span>{message}</span>
           </div>
         )}
@@ -215,7 +173,7 @@ export const AuthPortal = () => {
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   className="kyvera-input pl-10"
-                  placeholder="name@mra.kyvera.com"
+                  placeholder="name@company.com"
                 />
               </div>
             </div>
@@ -230,38 +188,16 @@ export const AuthPortal = () => {
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                   className="kyvera-input pl-10"
+                  placeholder="••••••••"
                 />
               </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Target Designation</label>
-              <select
-                value={loginRoleKey}
-                onChange={(e) => setLoginRoleKey(e.target.value)}
-                className="kyvera-input font-semibold text-slate-800"
-              >
-                {portalType === 'EMPLOYEE' ? (
-                  <>
-                    <option value="TEAM_LEAD">Team Lead / Sub-TL (Arjun Mehta)</option>
-                    <option value="INVENTORY">Inventory Manager (Priya Nair)</option>
-                    <option value="EMPLOYEE">Normal Employee (Suresh Kumar)</option>
-                  </>
-                ) : (
-                  <>
-                    <option value="COORDINATOR">Project Coordinator (Vikram Seth)</option>
-                    <option value="CEO">CEO / Founder / Director (Dr. Rajesh Varma)</option>
-                    <option value="HR">HR Manager (Ananya Sharma)</option>
-                  </>
-                )}
-              </select>
             </div>
 
             <button
               type="submit"
               className="w-full kyvera-btn-primary py-3.5 text-sm font-extrabold shadow-md mt-2"
             >
-              Sign In to {portalType === 'EMPLOYEE' ? 'Employee Portal' : 'Organization Portal'} <ArrowRight size={18} />
+              Sign In to Platform <ArrowRight size={18} />
             </button>
           </form>
         )}
@@ -274,7 +210,7 @@ export const AuthPortal = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Ramesh Patel"
+                placeholder="e.g. Alex Johnson"
                 value={empRegData.name}
                 onChange={(e) => setEmpRegData({ ...empRegData, name: e.target.value })}
                 className="kyvera-input"
@@ -298,7 +234,7 @@ export const AuthPortal = () => {
                 <select
                   value={empRegData.dept}
                   onChange={(e) => setEmpRegData({ ...empRegData, dept: e.target.value })}
-                  className="kyvera-input"
+                  className="kyvera-input font-bold"
                 >
                   {departments.map((d) => (
                     <option key={d} value={d}>{d}</option>
@@ -309,11 +245,11 @@ export const AuthPortal = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Role Type *</label>
+                <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Designation Role *</label>
                 <select
                   value={empRegData.role}
                   onChange={(e) => setEmpRegData({ ...empRegData, role: e.target.value })}
-                  className="kyvera-input"
+                  className="kyvera-input font-bold"
                 >
                   <option value="TEAM_LEAD">Team Lead / Sub-TL</option>
                   <option value="INVENTORY">Inventory Manager</option>
@@ -326,7 +262,7 @@ export const AuthPortal = () => {
                 <input
                   type="email"
                   required
-                  placeholder="ramesh@mra.kyvera.com"
+                  placeholder="alex@company.com"
                   value={empRegData.email}
                   onChange={(e) => setEmpRegData({ ...empRegData, email: e.target.value })}
                   className="kyvera-input"
@@ -335,7 +271,7 @@ export const AuthPortal = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Set Password *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Password *</label>
               <input
                 type="password"
                 required
@@ -363,7 +299,7 @@ export const AuthPortal = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. Dr. Priya Varma"
+                placeholder="e.g. Sarah Connor"
                 value={orgRegData.name}
                 onChange={(e) => setOrgRegData({ ...orgRegData, name: e.target.value })}
                 className="kyvera-input"
@@ -387,7 +323,7 @@ export const AuthPortal = () => {
                 <select
                   value={orgRegData.role}
                   onChange={(e) => setOrgRegData({ ...orgRegData, role: e.target.value })}
-                  className="kyvera-input"
+                  className="kyvera-input font-bold"
                 >
                   <option value="COORDINATOR">Project Coordinator</option>
                   <option value="CEO">CEO / Founder / Director</option>
@@ -401,7 +337,7 @@ export const AuthPortal = () => {
               <input
                 type="email"
                 required
-                placeholder="exec@mra.kyvera.com"
+                placeholder="exec@company.com"
                 value={orgRegData.email}
                 onChange={(e) => setOrgRegData({ ...orgRegData, email: e.target.value })}
                 className="kyvera-input"
@@ -409,7 +345,7 @@ export const AuthPortal = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Set Password *</label>
+              <label className="block text-xs font-extrabold text-slate-800 mb-1.5">Password *</label>
               <input
                 type="password"
                 required
@@ -428,64 +364,6 @@ export const AuthPortal = () => {
             </button>
           </form>
         )}
-
-        {/* 1-Click Demo Accounts Selector */}
-        <div className="pt-3 border-t border-slate-200 space-y-2">
-          <div className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider text-center">
-            1-Click Quick Login Select
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            {portalType === 'EMPLOYEE' ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => handleDemoAccountSelect('TEAM_LEAD')}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
-                >
-                  Team Lead (Arjun)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoAccountSelect('INVENTORY')}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
-                >
-                  Inventory (Priya)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoAccountSelect('EMPLOYEE')}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-cyan-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-cyan-400"
-                >
-                  Employee (Suresh)
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={() => handleDemoAccountSelect('COORDINATOR')}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-teal-400"
-                >
-                  Coordinator (Vikram)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoAccountSelect('CEO')}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-teal-400"
-                >
-                  CEO / Founder (Rajesh)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoAccountSelect('HR')}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-teal-50 border border-slate-200 text-[11px] text-slate-800 font-extrabold truncate text-center cursor-pointer transition-all hover:border-teal-400"
-                >
-                  HR Manager (Ananya)
-                </button>
-              </>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );
