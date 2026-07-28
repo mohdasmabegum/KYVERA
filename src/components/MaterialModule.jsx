@@ -14,7 +14,8 @@ import {
   AlertCircle,
   FileSpreadsheet,
   Layers,
-  ArrowRight
+  ListTodo,
+  AlertTriangle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -52,11 +53,16 @@ export const MaterialModule = () => {
     location: 'Rack A-1'
   });
 
-  const isInventoryManager = currentUser.id === 'INVENTORY' || currentUser.id === 'CEO' || currentUser.id === 'COORDINATOR';
+  const isInventoryManager = ['INVENTORY', 'CEO', 'COORDINATOR'].includes(currentUser.id);
 
   const handleRequestSubmit = (e) => {
     e.preventDefault();
-    submitMaterialRequest(requestData);
+    submitMaterialRequest({
+      ...requestData,
+      empId: currentUser.empId,
+      empName: currentUser.name,
+      dept: currentUser.dept
+    });
     setIsReqModalOpen(false);
     setRequestData({ materialName: '', quantity: '1 pcs', projectName: '', priority: 'Quick' });
     confetti({ particleCount: 40, spread: 50 });
@@ -72,6 +78,11 @@ export const MaterialModule = () => {
     setIsAddItemModalOpen(false);
     setNewItemData({ name: '', category: 'Hardware', qty: 10, unit: 'pcs', minQty: 5, location: 'Rack A-1' });
   };
+
+  // Filter requests that are "Pending for Order" for the Inventory To-Do Reminder List
+  const pendingForOrderList = materialRequests.filter(m => 
+    m.availability === 'Out of Stock' && (m.status === 'Pending' || m.status === 'Accepted' || m.status === 'Pending for Order')
+  );
 
   const filteredRequests = materialRequests.filter(req => {
     const matchesSearch = 
@@ -92,7 +103,8 @@ export const MaterialModule = () => {
 
   const getStatusBadge = (status) => {
     if (status === 'Completed' || status === 'Handed Over') return 'badge-success';
-    if (status === 'Ordered') return 'badge-important';
+    if (status === 'Ordered') return 'badge-general';
+    if (status === 'Pending for Order') return 'badge-important';
     if (status === 'Rejected') return 'badge-emergency';
     return 'badge-pending';
   };
@@ -103,11 +115,11 @@ export const MaterialModule = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl glass-panel border border-cyan-500/20">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <Package size={16} /> Supply Chain & Inventory Portal
+            <Package size={16} /> Material Requisition & Inventory Portal
           </div>
-          <h1 className="text-xl font-extrabold text-white mt-1">Material Request & Operations</h1>
+          <h1 className="text-xl font-extrabold text-white mt-1">Material Requests & Supply Operations</h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Request project hardware, monitor inventory stock, and track procurement handover.
+            Submit material requests, manage stock availability, and handle inventory handover.
           </p>
         </div>
 
@@ -136,6 +148,41 @@ export const MaterialModule = () => {
           </button>
         </div>
       </div>
+
+      {/* Inventory Reminder To-Do List for Pending Orders (User Specific Requirement #9) */}
+      {pendingForOrderList.length > 0 && (
+        <div className="p-4 rounded-2xl glass-panel border border-amber-500/40 bg-amber-950/20 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+              <ListTodo size={16} /> Inventory To-Do Reminder: Pending for Order ({pendingForOrderList.length})
+            </span>
+            <span className="text-[10px] text-amber-300 bg-amber-950 px-2 py-0.5 rounded border border-amber-800 font-semibold">
+              Action Needed: Place Vendor Orders
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {pendingForOrderList.map((item) => (
+              <div key={item.id} className="p-3 rounded-xl bg-slate-900 border border-amber-500/30 flex items-center justify-between text-xs">
+                <div>
+                  <div className="font-extrabold text-white">{item.materialName} ({item.quantity})</div>
+                  <div className="text-[10px] text-slate-400">Req By: {item.empName} ({item.dept}) • Project: {item.projectName}</div>
+                  <span className="text-[9px] font-bold text-amber-400">Status: Pending for Order</span>
+                </div>
+
+                {isInventoryManager && (
+                  <button
+                    onClick={() => updateMaterialStatus(item.id, 'Ordered', currentUser.name, { availability: 'Out of Stock - Order Placed' })}
+                    className="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded text-xs font-bold shadow-md cursor-pointer"
+                  >
+                    Place Order Now
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Stock Overview Bar */}
       <div className="rounded-2xl glass-panel p-4 border border-slate-800 space-y-3">
@@ -175,7 +222,7 @@ export const MaterialModule = () => {
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search by Employee ID, Name, or Material..."
+              placeholder="Search by User ID, Name, Dept, or Material..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="kyvera-input pl-9 text-xs"
@@ -183,7 +230,7 @@ export const MaterialModule = () => {
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap">
-            {['ALL', 'Pending', 'Accepted', 'Ordered', 'Received', 'Handed Over', 'Completed'].map((status) => (
+            {['ALL', 'Pending', 'Accepted', 'Pending for Order', 'Ordered', 'Handed Over'].map((status) => (
               <button
                 key={status}
                 onClick={() => setActiveTabFilter(status)}
@@ -213,15 +260,15 @@ export const MaterialModule = () => {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-extrabold text-sm text-white">{req.materialName}</span>
                       <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px] font-bold">
-                        Qty: {req.quantity}
+                        Qty/Units: {req.quantity}
                       </span>
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPriorityBadge(req.priority)}`}>
-                        {req.priority} Priority
+                        {req.priority} Requirement
                       </span>
                     </div>
 
                     <div className="text-xs text-slate-300">
-                      Requested by <span className="font-bold text-white">{req.empName}</span> ({req.empId}) • <span className="text-slate-400">Dept: {req.dept}</span>
+                      Dept Request by <span className="font-bold text-white">{req.empName}</span> (ID: {req.empId}) • <span className="text-slate-400">Dept: {req.dept}</span>
                     </div>
 
                     <div className="text-xs text-slate-400">
@@ -234,7 +281,7 @@ export const MaterialModule = () => {
                       {req.status}
                     </span>
                     <span className="text-[10px] text-slate-400">
-                      Req Date: {req.requestDate}
+                      Request Date: {req.requestDate}
                     </span>
                   </div>
                 </div>
@@ -247,7 +294,7 @@ export const MaterialModule = () => {
                     </span>
                     {req.orderDate && (
                       <span className="flex items-center gap-1 text-amber-300">
-                        <ShoppingCart size={12} /> Ordered: {req.orderDate}
+                        <ShoppingCart size={12} /> Order Date: {req.orderDate}
                       </span>
                     )}
                     {req.handoverDate && (
@@ -257,24 +304,33 @@ export const MaterialModule = () => {
                     )}
                   </div>
 
-                  {/* Inventory Manager Workflow Action Controls */}
+                  {/* Inventory Manager Decision Controls (Available vs Not Available -> Pending for Order) */}
                   {isInventoryManager && (
                     <div className="flex items-center gap-2 flex-wrap">
                       {req.status === 'Pending' && (
                         <>
                           <button
-                            onClick={() => updateMaterialStatus(req.id, 'Accepted', currentUser.name, { availability: 'Available' })}
+                            onClick={() => updateMaterialStatus(req.id, 'Accepted', currentUser.name, { availability: 'Available at Moment' })}
                             className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold"
                           >
-                            Accept Request
+                            Accept & Available (Issue Stock)
                           </button>
                           <button
-                            onClick={() => updateMaterialStatus(req.id, 'Ordered', currentUser.name, { availability: 'Out of Stock' })}
+                            onClick={() => updateMaterialStatus(req.id, 'Pending for Order', currentUser.name, { availability: 'Out of Stock' })}
                             className="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold"
                           >
-                            Mark Out of Stock & Purchase
+                            Not Available (Add to To-Do List)
                           </button>
                         </>
+                      )}
+
+                      {req.status === 'Pending for Order' && (
+                        <button
+                          onClick={() => updateMaterialStatus(req.id, 'Ordered', currentUser.name, { availability: 'Out of Stock - Order Placed' })}
+                          className="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold"
+                        >
+                          Place Vendor Order Now
+                        </button>
                       )}
 
                       {req.status === 'Accepted' && (
@@ -291,19 +347,10 @@ export const MaterialModule = () => {
 
                       {req.status === 'Ordered' && (
                         <button
-                          onClick={() => updateMaterialStatus(req.id, 'Received', currentUser.name, { availability: 'Received at Warehouse' })}
-                          className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold"
-                        >
-                          Mark Material Received
-                        </button>
-                      )}
-
-                      {req.status === 'Received' && (
-                        <button
-                          onClick={() => updateMaterialStatus(req.id, 'Handed Over', currentUser.name)}
+                          onClick={() => updateMaterialStatus(req.id, 'Handed Over', currentUser.name, { availability: 'Received & Handed Over' })}
                           className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold"
                         >
-                          Complete Handover
+                          Order Received & Hand Over
                         </button>
                       )}
                     </div>
@@ -319,13 +366,34 @@ export const MaterialModule = () => {
       <Modal
         isOpen={isReqModalOpen}
         onClose={() => setIsReqModalOpen(false)}
-        title="New Material Requisition"
+        title="Department Material Request Form"
         icon={Package}
       >
         <form onSubmit={handleRequestSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Select / Enter Material Name *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Department Name *</label>
+              <input
+                type="text"
+                disabled
+                value={currentUser.dept}
+                className="kyvera-input bg-slate-900 text-slate-400"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">User ID *</label>
+              <input
+                type="text"
+                disabled
+                value={currentUser.empId}
+                className="kyvera-input bg-slate-900 text-slate-400"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Type of Material *</label>
               <input
                 type="text"
                 required
@@ -337,11 +405,11 @@ export const MaterialModule = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Quantity / Length *</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">No. of Units / Length *</label>
               <input
                 type="text"
                 required
-                placeholder="e.g. 5 pcs or 50 meters"
+                placeholder="e.g. 5 units or 20 meters"
                 value={requestData.quantity}
                 onChange={(e) => setRequestData({ ...requestData, quantity: e.target.value })}
                 className="kyvera-input"
@@ -350,7 +418,7 @@ export const MaterialModule = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Project Name *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">For Project Name *</label>
             <input
               type="text"
               required
@@ -362,20 +430,16 @@ export const MaterialModule = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Requirement Priority *</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">Type of Requirement *</label>
             <select
               value={requestData.priority}
               onChange={(e) => setRequestData({ ...requestData, priority: e.target.value })}
               className="kyvera-input"
             >
-              <option value="General">General</option>
               <option value="Quick">Quick</option>
               <option value="Emergency">Emergency</option>
+              <option value="General">General</option>
             </select>
-          </div>
-
-          <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400">
-            Requisition submitted under: <span className="text-white font-bold">{currentUser.name}</span> ({currentUser.empId}) - {currentUser.dept}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
@@ -390,7 +454,7 @@ export const MaterialModule = () => {
               type="submit"
               className="kyvera-btn-primary text-xs"
             >
-              Submit Requisition
+              Submit to Inventory
             </button>
           </div>
         </form>
@@ -400,7 +464,7 @@ export const MaterialModule = () => {
       <Modal
         isOpen={isAddItemModalOpen}
         onClose={() => setIsAddItemModalOpen(false)}
-        title="Add Inventory Item to Catalog"
+        title="Add Inventory Stock Item"
         icon={Layers}
       >
         <form onSubmit={handleAddItemSubmit} className="space-y-4">
