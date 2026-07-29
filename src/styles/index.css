@@ -1,33 +1,39 @@
 @import "tailwindcss";
 
-/* KYVERA Enterprise Design System */
+/* KYVERA MRA Premium Enterprise Design System */
 :root {
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --primary-blue: #0265dc;
   --primary-navy: #0f172a;
-  --primary-cyan: #0284c7;
-  --primary-teal: #0d9488;
   --bg-app: #f8fafc;
-  --bg-card: #ffffff;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --border-color: #e2e8f0;
+  --bg-surface: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
+  font-family: var(--font-body);
   background-color: var(--bg-app);
-  color: var(--text-primary);
+  color: var(--text-main);
   min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbars */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.025em;
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -43,66 +49,84 @@ body {
   background: #94a3b8;
 }
 
-/* Card Hover Animations & Separate Cards */
-.card-hover {
+/* Premium Card Hover Effect */
+.kyvera-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.card-hover:hover {
+
+.kyvera-card-hover {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kyvera-card-hover:hover {
   transform: translateY(-2px);
+  border-color: #cbd5e1;
   box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.08);
 }
 
-/* Input Fields */
+/* Form Controls */
 .kyvera-input {
   width: 100%;
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
+  border-radius: 0.875rem;
+  padding: 0.8rem 1.1rem;
   color: #0f172a;
-  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.925rem;
   font-weight: 600;
   outline: none;
   transition: all 0.2s ease;
 }
 
 .kyvera-input:focus {
-  border-color: #0284c7;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  border-color: #0265dc;
+  box-shadow: 0 0 0 3px rgba(2, 101, 220, 0.15);
 }
 
-/* Buttons */
+/* Primary Button */
 .kyvera-btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: linear-gradient(135deg, #0265dc 0%, #004fb3 100%);
   color: #ffffff;
+  font-family: var(--font-heading);
   font-weight: 700;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.5rem;
+  border-radius: 0.875rem;
+  padding: 0.8rem 1.6rem;
   border: none;
-  font-size: 0.9rem;
+  font-size: 0.925rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+  box-shadow: 0 4px 14px rgba(2, 101, 220, 0.25);
 }
 
 .kyvera-btn-primary:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  background: linear-gradient(135deg, #0052cc 0%, #003e8c 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 6px 18px rgba(2, 101, 220, 0.35);
 }
 
+/* Secondary Button */
 .kyvera-btn-secondary {
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
   color: #334155;
+  font-family: var(--font-heading);
   font-weight: 700;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.9rem;
+  border-radius: 0.875rem;
+  padding: 0.8rem 1.4rem;
+  font-size: 0.925rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -113,37 +137,40 @@ body {
 
 .kyvera-btn-secondary:hover {
   background: #f8fafc;
-  border-color: #0284c7;
-  color: #0284c7;
+  border-color: #0265dc;
+  color: #0265dc;
 }
 
 /* Badges */
 .badge-success {
-  background: #d1fae5;
+  background: #ecfdf5;
   color: #047857;
   border: 1px solid #a7f3d0;
   font-weight: 700;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 9999px;
   font-size: 0.75rem;
+  letter-spacing: 0.025em;
 }
 
 .badge-pending {
-  background: #fef9c3;
+  background: #fefce8;
   color: #a16207;
   border: 1px solid #fef08a;
   font-weight: 700;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 9999px;
   font-size: 0.75rem;
+  letter-spacing: 0.025em;
 }
 
 .badge-emergency {
-  background: #ffe4e6;
+  background: #fff1f2;
   color: #e11d48;
   border: 1px solid #fecdd3;
   font-weight: 700;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 9999px;
   font-size: 0.75rem;
+  letter-spacing: 0.025em;
 }
